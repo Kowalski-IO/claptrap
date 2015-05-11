@@ -25,7 +25,7 @@ import org.subethamail.smtp.server.SMTPServer;
  * @author Brandon Kowalski 
  * @version 0.0.1
  */
-public class Claptrap {
+public class App {
 
 	private static final DefaultMessageHandlerFactory FACTORY = new DefaultMessageHandlerFactory();
 

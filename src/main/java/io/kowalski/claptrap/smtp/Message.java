@@ -1,6 +1,6 @@
 package io.kowalski.claptrap.smtp;
 
-import io.kowalski.claptrap.Claptrap;
+import io.kowalski.claptrap.App;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,8 +47,8 @@ public class Message implements MessageHandler, Serializable, Comparable<Message
 	public final void done() {
 		setReceived(new Date());
 		String mapName = from.substring(0, from.indexOf('@'));
-		Claptrap.SERVER_SET.add(mapName);
-		Claptrap.MEM_STORE.add(this, mapName);
+		App.SERVER_SET.add(mapName);
+		App.MEM_STORE.add(this, mapName);
 	}
 
 	@Override

@@ -7,15 +7,14 @@
 	<version>0.0.1</version>
 	<packaging>jar</packaging>
 
-	<name>potato-salad</name>
-	<url>https://github.com/Kowalski-IO/potato-salad</url>
+	<name>claptrap</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<build>
-		<finalName>potato-salad</finalName>
+		<finalName>claptrap</finalName>
 		<pluginManagement>
 			<plugins>
 				<plugin>
