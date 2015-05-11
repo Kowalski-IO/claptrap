@@ -1,0 +1,40 @@
+body {
+	margin-top: 50px;;
+}
+
+.center {
+	text-align: center;
+}
+
+.pull-right {
+	float: right;
+	clear: both;
+}
+
+#claptrap {
+	position: fixed;
+	margin-left: 15px;
+	bottom: 0px;
+}
+
+#claptrap-img {
+	height: 180px;
+}
+
+h1, h2, h3, h4, h5 {
+	display: inline;
+}
+
+#no-servers-found {
+	text-align: center;
+}
+
+#server-select {
+	width: 100% display:inline-block;
+}
+
+#delete-all-button {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+}

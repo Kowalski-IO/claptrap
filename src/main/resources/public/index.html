@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Claptrap</title>
+<meta name="description" content="Fake SMTP Server">
+<meta name="author" content="Brandon Kowalski">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="css/normalize.css">
+<link rel="stylesheet" href="css/skeleton.css">
+<link rel="stylesheet" href="css/custom.css">
+
+</head>
+<body>
+	<div class="container">
+		<div id="no-servers-found">
+			<h4>Claptrap hasn't received any emails.</h4>
+			<br>
+			<button onclick="loadServers()">Check Again</button>
+		</div>
+		<div id="server-options">
+			<span id="selected-server"></span> <span id="server-select"> <strong>Server
+					Select: </strong> <select id="server-list"></select>
+			</span>
+			<button id="reload-email-button" class="pull-right"
+				onclick="loadEmails()">Reload Emails</button>
+		</div>
+		<div id="email-table-container">
+			<input id="search-box" class="search" placeholder="Search all fields" />
+			<table id="email-table" class="u-full-width">
+				<thead>
+					<tr>
+						<th>Date Received:</th>
+						<th>From:</th>
+						<th>Recipient:</th>
+						<th>Subject:</th>
+						<th>Body:</th>
+						<th></th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody id="email-table-body" class="list">
+				</tbody>
+			</table>
+		</div>
+		<button id="delete-all-button" onclick="deleteAllPrompt()">Delete All</button>
+	</div>
+	<div id="claptrap">
+		<a href="documentation.html"><img id="claptrap-img"
+			title="Click me for the documentation!" alt="Documentation"
+			src="images/claptrap.png" /></a>
+	</div>
+	
+	<script src="js/zepto.min.js" type="text/javascript"></script>
+	<script src="js/list.min.js" type="text/javascript"></script>
+	<script src="js/konami.js" type="text/javascript"></script>
+	<script src="js/claptrap.js" type="text/javascript"></script>
+</body>
+</html>

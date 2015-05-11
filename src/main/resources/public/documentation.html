@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Claptrap - Documentation</title>
+<meta name="description" content="Fake SMTP Server">
+<meta name="author" content="Brandon Kowalski">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="css/normalize.css">
+<link rel="stylesheet" href="css/skeleton.css">
+<link rel="stylesheet" href="css/custom.css">
+
+</head>
+<body>
+	<div class="container">
+
+		<h3>Claptrap Documentation</h3><a href="/"  class="button pull-right">Home</a>
+		<br><h5>Goodbye nonsensical email testing.</h5>
+		<hr>
+
+		<h4>Initial Setup</h4>
+		<p>Getting started with Claptrap is a breeze. Simply run the jar with java -jar Claptrap.jar and change any
+			SMTP settings to point at Claptrap's SMTP server.
+			<br>
+			Please note Claptrap requires Java JRE 8.	
+		</p>
+
+		<pre>
+			<code>
+				SMTP Settings
+				Transport Type: SMTP
+				Host: &lt;IP or Hostname Above&gt;
+				Post: 2525
+				Authentication: False
+
+				Email Username: Anythingyouwant@yourchoice.validTLD
+				Password: ThisIsIgnored
+				
+			</code>
+		</pre>
+		
+		<p> Please note that the first portion of the sender email address (i.e. before the @ symbol will be used as the server name.)</p>
+		
+		<hr>
+		
+		<h4>Usage</h4>
+		<p>Using Claptrap is just as easy. Point your browser to the hostname and http server port shown in the console (since you are reading this you are already here!).<br>
+		If no emails have been received yet a message saying so will show.<br><br> 
+		Once the first email arrives a server select menu will appear. <br>
+		Choose the server that has the same name was the first half of the username that you set earlier.<br>
+		Click the reload button and after a slight delay the emails will appear.<br><br>
+		
+		To view the full email click the view button. The full message will appear in a new tab / window.<br>
+		To delete a email click the delete button.<br>
+		To delete all emails for the currently selected server, click the delete all button found at the bottom right of the page.<br>
+		To delete all emails for the currently selected server in style, enter the Konami Code.<br><br>
+		
+		Now that I think about it these instructions were probably not needed.
+		</p>
+		
+		<hr>
+		
+		<h4>Advanced Hooplah</h4>
+		
+		<p>You can force Claptrap to default to a certain server with a query string param.<br>
+		Simply do the following:
+		<pre>
+			<code>
+				http://somehost:someport?server=pantShoppingIsHardWithOneLeg
+			</code>
+		</pre>
+		
+		</p>
+		
+		<hr>
+		
+		<h4>Bonus Cat</h4>
+		
+		<p>
+		For reaching the bottom of the page you earned yourself a picture of a cat.<br>
+		<img src="images/cat.jpg" />
+		</p>
+
+
+	</div>
+		<div id="claptrap" >
+		<img id="claptrap-img" title="Hello Minion!" src="images/claptrap.png" />
+	</div>
+</body>
+</html>
