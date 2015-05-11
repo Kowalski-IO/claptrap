@@ -86,10 +86,24 @@ var buildTable = function(data) {
 			html : item.body
 		}).addClass('body'));
 
+		
+		var view_btn = $('<button>', {
+			id : 'viewbtn' + item.uuid,
+			text : 'View'
+		});
+		
+		view_btn.bind('click', function() {
+			viewEmail(server, item.uuid);
+		});
+		
+		table_row.append($('<td>', {
+			html : view_btn
+		}));
+		
 		var delete_btn = $('<button>', {
-			id : 'btn' + item.uuid,
+			id : 'delbtn' + item.uuid,
 			text : 'Delete'
-		})
+		});
 		delete_btn.bind('click', function() {
 			deleteEmail(server, item.uuid);
 		});
@@ -150,6 +164,10 @@ var buildServerList = function(data) {
 		$('#reload-email-button').show();
 	}
 
+};
+
+var viewEmail = function(server, uuid) {
+	window.open("email.html?server=" + server + '&email=' + uuid);
 };
 
 var deleteAllPrompt = function() {

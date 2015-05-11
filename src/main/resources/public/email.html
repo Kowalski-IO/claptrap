@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Claptrap - Single Email</title>
+<meta name="description" content="Fake SMTP Server">
+<meta name="author" content="Brandon Kowalski">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="css/normalize.css">
+<link rel="stylesheet" href="css/skeleton.css">
+<link rel="stylesheet" href="css/custom.css">
+
+</head>
+<body>
+	<div class="container">
+	
+		<button id="close-button" onclick="window.close()">Close email</button>
+
+		<span id="no-email-found"><h4>No email found for given
+				server and id.</h4></span>
+
+		<div id="email-container">
+
+			<div class="row">
+				<div class="four columns">
+					<label for="recipient">Recipient:</label> <span id="recipient"></span>
+				</div>
+				<div class="four columns">
+					<label for="from">From:</label> <span id="from"></span>
+				</div>
+				<div class="four columns">
+					<label for="received">Received on:</label> <span id="received"></span>
+				</div>
+			</div>
+
+			<hr>
+
+			<label for="subject">Subject:</label> <span id="subject"></span> <label
+				for="body">Body:</label> <span id="body"></span>
+
+		</div>
+	</div>
+
+	<script src="js/zepto.min.js" type="text/javascript"></script>
+	<script src="js/single-email.js" type="text/javascript"></script>
+</body>
+</html>

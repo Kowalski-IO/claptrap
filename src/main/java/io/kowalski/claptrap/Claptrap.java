@@ -19,9 +19,11 @@ import org.subethamail.smtp.server.SMTPServer;
 
 /**
  * Claptrap
+ * Fake smtp server to use for debugging purposes.
+ * Stores messages in MapDB for super fast storage and general laziness.
  * 
- * @author Brandon Kowalski Fake smtp server to use for debugging purposes.
- *         Stores messages in MapDB for super fast storage.
+ * @author Brandon Kowalski 
+ * @version 0.0.1
  */
 public class Claptrap {
 
@@ -71,7 +73,7 @@ public class Claptrap {
 
 	private static void startMailServer() {
 		SMTPServer smtpServer = new SMTPServer(FACTORY);
-		smtpServer.setSoftwareName("Potato Salad Fake SMTP");
+		smtpServer.setSoftwareName("Claptrap SMTP");
 		smtpServer.setPort(2525);
 		smtpServer.start();
 	}
