@@ -31,7 +31,7 @@ public class EmailSender {
 			message.setFrom(new InternetAddress(from));			
 
 			message.setSubject("This is the Subject Line!");
-			message.setText("This is actual message");
+			message.setText("This is the actual message");
 
 			for (int i = 0; i < 100; i++) {
 				message.addRecipient(Message.RecipientType.TO, new InternetAddress(
