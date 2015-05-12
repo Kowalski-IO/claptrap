@@ -1,0 +1,2 @@
+Licenses for software included within this distribution / repository can be found in the licenses directory.
+Software that is included as a Maven dependency should have their license included when pulling it down.

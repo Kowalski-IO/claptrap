@@ -12,14 +12,28 @@
 <link rel="stylesheet" href="css/skeleton.css">
 <link rel="stylesheet" href="css/custom.css">
 
+<link rel="stylesheet" href="css/gh-fork-ribbon.min.css" />
+<!--[if lt IE 9]>
+  <link rel="stylesheet" href="css/gh-fork-ribbon.ie.min.css" />
+<![endif]-->
+
 </head>
 <body>
 	<div class="container">
-
-		<h3>Claptrap Documentation</h3><a href="/"  class="button pull-right">Home</a>
-		<br><h5>Goodbye nonsensical email testing.</h5>
-		<hr>
-
+	
+		<div id="navbar">
+			<div id="server-options" class="row">
+				<div class="six columns">
+					<h3>Claptrap Documentation</h3><br>
+					<h5>Goodbye nonsensical email testing.</h5>
+				</div>
+				<div class="six columns">
+					<a href="/" class="button pull-right">Home</a>
+					<a href="credits.html" class="button pull-right">Credits</a>
+				</div>
+			</div>
+		</div>
+		
 		<h4>Initial Setup</h4>
 		<p>Getting started with Claptrap is a breeze. Simply run the jar with java -jar Claptrap.jar and change any
 			SMTP settings to point at Claptrap's SMTP server.
@@ -35,8 +49,8 @@
 				Post: 2525
 				Authentication: False
 
-				Email Username: Anythingyouwant@yourchoice.validTLD
-				Password: ThisIsIgnored
+				Email Username: anythingYouWant@yourChoice.someTLD
+				Password: thisDoesNotMatter
 				
 			</code>
 		</pre>
@@ -46,7 +60,7 @@
 		<hr>
 		
 		<h4>Usage</h4>
-		<p>Using Claptrap is just as easy. Point your browser to the hostname and http server port shown in the console (since you are reading this you are already here!).<br>
+		<p>Using Claptrap is just as easy. Point your browser to the hostname and http server port shown in the console (defaults to 4567).<br>
 		If no emails have been received yet a message saying so will show.<br><br> 
 		Once the first email arrives a server select menu will appear. <br>
 		Choose the server that has the same name was the first half of the username that you set earlier.<br>
@@ -54,10 +68,8 @@
 		
 		To view the full email click the view button. The full message will appear in a new tab / window.<br>
 		To delete a email click the delete button.<br>
-		To delete all emails for the currently selected server, click the delete all button found at the bottom right of the page.<br>
+		To delete all emails for the currently selected server, click the delete all button, located in the top navbar.<br>
 		To delete all emails for the currently selected server in style, enter the Konami Code.<br><br>
-		
-		Now that I think about it these instructions were probably not needed.
 		</p>
 		
 		<hr>
@@ -68,7 +80,7 @@
 		Simply do the following:
 		<pre>
 			<code>
-				http://somehost:someport?server=pantShoppingIsHardWithOneLeg
+				http://somehost:someport?server=anyThingYourWantFromAboveSMTPSettings
 			</code>
 		</pre>
 		
@@ -79,8 +91,8 @@
 		<h4>Bonus Cat</h4>
 		
 		<p>
-		For reaching the bottom of the page you earned yourself a picture of a cat.<br>
-		<img src="images/cat.jpg" />
+			For reaching the bottom of the page you earned yourself a picture of a cat.<br>
+			<img src="images/cat.jpg" />
 		</p>
 
 
@@ -88,5 +100,11 @@
 		<div id="claptrap" >
 		<img id="claptrap-img" title="Hello Minion!" src="images/claptrap.png" />
 	</div>
+	
+	<div class="github-fork-ribbon-wrapper fixed right">
+        <div class="github-fork-ribbon">
+            <a href="https://github.com/Kowalski-IO/claptrap">Fork me on GitHub!</a>
+        </div>
+    </div>
 </body>
 </html>

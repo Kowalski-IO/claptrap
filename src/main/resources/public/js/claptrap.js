@@ -131,7 +131,7 @@ var buildTable = function(data) {
 			valueNames : [ 'date', 'from', 'recipient', 'subject', 'body' ]
 		};
 
-		var hackerList = new List('email-table-container', options);
+		var hackerList = new List('claptrap-container', options);
 	}
 };
 
@@ -176,57 +176,51 @@ var deleteAllPrompt = function() {
 	} 
 };
 
-$(document)
-		.ready(
-				function() {
+$(document).ready(function() {
+	console.log('       ,');
+	console.log('       |');
+	console.log('    ]  |.-._');
+	console.log('     \\|"(0)"| _]');
+	console.log('     `|=\\#/=|\\/');
+	console.log('      :  _  :');
+	console.log('       \\/_\\/ ');
+	console.log('        |=| ');
+	console.log('        `-\' Just follow the soothing sound of my voice!');
 
-					console.log('       ,');
-					console.log('       |');
-					console.log('    ]  |.-._');
-					console.log('     \\|"(0)"| _]');
-					console.log('     `|=\\#/=|\\/');
-					console.log('      :  _  :');
-					console.log('       \\/_\\/ ');
-					console.log('        |=| ');
-					console
-							.log('        `-\' Just follow the soothing sound of my voice!');
+	var aaaand_open = new Konami(function() {
+		deleteAllEmails(queryParams['server'] || $('#server-list').val());
+	});
 
-					var aaaand_open = new Konami(function() {
-						deleteAllEmails(queryParams['server'] || $('#server-list').val());
-					});
+	$('#no-servers-found').hide();
+	$('#server-select').hide();
+	$('#email-table').hide();
+	$('#search-box').hide();
+	$('#reload-email-button').hide();
+	$('#delete-all-button').hide();
+	
+	$('#server-list').change(function() {
+		loadEmails();
+	});
+	
+	var q = document.URL.split('?')[1];
+	if (q != undefined) {
+		q = q.split('&');
+		for (var i = 0; i < q.length; i++) {
+			hash = q[i].split('=');
+			queryParams.push(hash[1]);
+			queryParams[hash[0]] = hash[1];
+		}
+	};
 
-					$('#no-servers-found').hide();
-					$('#server-select').hide();
-					$('#email-table').hide();
-					$('#search-box').hide();
-					$('#reload-email-button').hide();
-					$('#delete-all-button').hide();
-					
-					$('#server-list').change(function() {
-						loadEmails();
-					});
-					
-
-					var q = document.URL.split('?')[1];
-					if (q != undefined) {
-						q = q.split('&');
-						for (var i = 0; i < q.length; i++) {
-							hash = q[i].split('=');
-							queryParams.push(hash[1]);
-							queryParams[hash[0]] = hash[1];
-						}
-					}
-					;
-
-					if (queryParams['server'] != undefined) {
-						$('#selected-server').append($('<h4>', {
-							html : 'Server: ' + queryParams['server']
-						}));
-						console.log('Loading page for query param server '
-								+ queryParams['server'] + '.');
-						loadEmails();
-					} else {
-						loadServers();
-					}
-
-				});
+	if (queryParams['server'] != undefined) {
+		$('#selected-server').append($('<h4>', {
+			html : 'Server: ' + queryParams['server']
+		}));
+		console.log('Loading page for query param server '
+				+ queryParams['server'] + '.');
+		$('#reload-email-button').show();
+		loadEmails();
+	} else {
+		loadServers();
+	}
+});

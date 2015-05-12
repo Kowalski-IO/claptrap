@@ -14,38 +14,49 @@
 
 </head>
 <body>
-	<div class="container">
+	<div id="claptrap-container" class="container">
 		<div id="no-servers-found">
 			<h4>Claptrap hasn't received any emails.</h4>
 			<br>
 			<button onclick="loadServers()">Check Again</button>
 		</div>
-		<div id="server-options">
-			<span id="selected-server"></span> <span id="server-select"> <strong>Server
-					Select: </strong> <select id="server-list"></select>
-			</span>
-			<button id="reload-email-button" class="pull-right"
-				onclick="loadEmails()">Reload Emails</button>
+		
+		<div id="navbar">
+			<div id="server-options" class="row">
+				<div class="six columns">
+					<span id="selected-server"></span> <span id="server-select"> 
+						<strong>Server Select: </strong> <select id="server-list"></select><br>
+						<input id="search-box" class="search" placeholder="Search all fields" />
+					</span>
+				</div>
+				<div class="six columns">
+					<button id="reload-email-button" class="pull-right"
+						onclick="loadEmails()">Reload Emails</button>
+					<button class="pull-right" onclick="deleteAllPrompt()">Delete All</button>
+				</div>
+			</div>
 		</div>
 		<div id="email-table-container">
-			<input id="search-box" class="search" placeholder="Search all fields" />
-			<table id="email-table" class="u-full-width">
-				<thead>
-					<tr>
-						<th>Date Received:</th>
-						<th>From:</th>
-						<th>Recipient:</th>
-						<th>Subject:</th>
-						<th>Body:</th>
-						<th></th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody id="email-table-body" class="list">
-				</tbody>
-			</table>
+			<div class="row">
+				<div class="tweleve columns">
+					<table id="email-table" class="u-full-width">
+						<thead>
+							<tr>
+								<th>Date Received:</th>
+								<th>From:</th>
+								<th>Recipient:</th>
+								<th>Subject:</th>
+								<th>Body:</th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody id="email-table-body" class="list">
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
-		<button id="delete-all-button" onclick="deleteAllPrompt()">Delete All</button>
 	</div>
 	<div id="claptrap">
 		<a href="documentation.html"><img id="claptrap-img"

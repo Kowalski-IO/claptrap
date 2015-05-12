@@ -1,5 +1,8 @@
 body {
-	margin-top: 50px;;
+	padding-top: 150px;
+}
+h1, h2, h3, h4, h5 {
+	display: inline;
 }
 
 .center {
@@ -18,11 +21,19 @@ body {
 }
 
 #claptrap-img {
-	height: 180px;
+	height: 150px;
 }
 
-h1, h2, h3, h4, h5 {
-	display: inline;
+#navbar {
+	top: 0;
+	padding-top: 25px;
+	width: inherit;
+	height: 100px;
+	background-color: #fff;
+	border-bottom: 1px solid black;
+	position: fixed;
+	display: block;
+	z-index: 1030;
 }
 
 #no-servers-found {
@@ -37,10 +48,4 @@ h1, h2, h3, h4, h5 {
 	position: fixed;
 	top: 10px;
 	right: 10px;
-}
-
-#delete-all-button {
-	position: fixed;
-	bottom: 0;
-	right: 0;
 }

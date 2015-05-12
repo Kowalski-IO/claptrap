@@ -47,7 +47,7 @@ public class Message implements MessageHandler, Serializable, Comparable<Message
 	public final void done() {
 		setReceived(new Date());
 		String mapName = from.substring(0, from.indexOf('@'));
-		App.SERVER_SET.add(mapName);
+		App.MEM_STORE.SERVER_SET.add(mapName);
 		App.MEM_STORE.add(this, mapName);
 	}
 

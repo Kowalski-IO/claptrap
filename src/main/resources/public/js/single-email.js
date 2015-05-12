@@ -47,36 +47,20 @@ var showEmail = function(data) {
 
 };
 
-$(document)
-.ready(
-		function() {
+$(document).ready(function() {
+	$('#email-container').hide();
+	
+	var q = document.URL.split('?')[1];
+	if (q != undefined) {
+		q = q.split('&');
+		for (var i = 0; i < q.length; i++) {
+			hash = q[i].split('=');
+			queryParams.push(hash[1]);
+			queryParams[hash[0]] = hash[1];
+		}
+	};
 
-			console.log('       ,');
-			console.log('       |');
-			console.log('    ]  |.-._');
-			console.log('     \\|"(0)"| _]');
-			console.log('     `|=\\#/=|\\/');
-			console.log('      :  _  :');
-			console.log('       \\/_\\/ ');
-			console.log('        |=| ');
-			console
-					.log('        `-\' Just follow the soothing sound of my voice!');
-			
-
-			$('#email-container').hide();
-			
-			var q = document.URL.split('?')[1];
-			if (q != undefined) {
-				q = q.split('&');
-				for (var i = 0; i < q.length; i++) {
-					hash = q[i].split('=');
-					queryParams.push(hash[1]);
-					queryParams[hash[0]] = hash[1];
-				}
-			}
-			;
-
-			if (queryParams['server'] != undefined && queryParams['email'] != undefined) {
-				loadEmail(queryParams['server'], queryParams['email']);
-			}
-		});
+	if (queryParams['server'] != undefined && queryParams['email'] != undefined) {
+		loadEmail(queryParams['server'], queryParams['email']);
+	}
+});

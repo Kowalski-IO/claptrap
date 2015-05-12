@@ -28,9 +28,7 @@ public class EmailSender {
 
 		try {
 			MimeMessage message = new MimeMessage(session);
-			message.setFrom(new InternetAddress(from));
-
-			
+			message.setFrom(new InternetAddress(from));			
 
 			message.setSubject("This is the Subject Line!");
 			message.setText("This is actual message");
@@ -46,5 +44,4 @@ public class EmailSender {
 			e.printStackTrace();
 		}
 	}
-
 }
