@@ -15,13 +15,12 @@
 </head>
 <body>
 	<div id="claptrap-container" class="container">
-		<div id="no-servers-found">
-			<h4>Claptrap hasn't received any emails.</h4>
-			<br>
-			<button onclick="loadServers()">Check Again</button>
-		</div>
-		
 		<div id="navbar">
+			<div id="no-servers-found">
+				<h4>Claptrap hasn't received any emails.</h4>
+				<br>
+				<button onclick="loadServers()">Check Again</button>
+			</div>
 			<div id="server-options" class="row">
 				<div class="six columns">
 					<span id="selected-server"></span> <span id="server-select"> 
@@ -32,7 +31,7 @@
 				<div class="six columns">
 					<button id="reload-email-button" class="pull-right"
 						onclick="loadEmails()">Reload Emails</button>
-					<button class="pull-right" onclick="deleteAllPrompt()">Delete All</button>
+					<button  id="delete-all-button" class="pull-right" onclick="deleteAllPrompt()">Delete All</button>
 				</div>
 			</div>
 		</div>
