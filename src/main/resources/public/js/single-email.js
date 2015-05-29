@@ -37,11 +37,11 @@ var showEmail = function(data) {
 		html : data.recipient
 	}));
 	
-	subject.append($('<h4>', {
+	subject.append($('<h5>', {
 		html : data.subject
 	}));
 	
-	body.append($('<h5>', {
+	body.append($('<h6>', {
 		html : data.body
 	}));
 

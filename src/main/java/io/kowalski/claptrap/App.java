@@ -2,6 +2,7 @@ package io.kowalski.claptrap;
 
 import static spark.Spark.delete;
 import static spark.Spark.get;
+import static spark.Spark.port;
 import static spark.SparkBase.staticFileLocation;
 import io.kowalski.claptrap.smtp.DefaultMessageHandlerFactory;
 import io.kowalski.claptrap.storage.MemoryStore;
@@ -24,24 +25,24 @@ public class App {
 
 	public static final MemoryStore MEM_STORE = new MemoryStore();
 
-	private static final int DEFAULT_CLAPTRAP_HTTP_PORT = 4567;
-	private static final int DEFAULT_SMTP_PORT = 2525;
-
-	public static void main(String[] args) {
+	public static void run(Settings settings) {
 		printClaptrap();
-		httpServer(DEFAULT_CLAPTRAP_HTTP_PORT);
-		mailServer(DEFAULT_SMTP_PORT);
+		httpServer(settings.getHttpPort());
+		mailServer(settings.getSmtpPort());
+		MEM_STORE.setInboxSize(settings.getInboxSize());
 	}
 
 	private static void httpServer(final int port) {
 		staticFileLocation("/public");
+		
+		port(port);
 
 		get("/heartbeat", (req, res) -> {
-			return "Potato Salad is up!";
+			return "Claptrap is up!";
 		}, new JsonTransformer());
 
 		get("/servers", (req, res) -> {
-			return MEM_STORE.SERVER_SET;
+			return MEM_STORE.getServers();
 		}, new JsonTransformer());
 
 		get("/emails/:mapName", (req, res) -> {
@@ -66,7 +67,7 @@ public class App {
 	private static void mailServer(final int port) {
 		SMTPServer smtpServer = new SMTPServer(FACTORY);
 		smtpServer.setSoftwareName("Claptrap SMTP");
-		smtpServer.setPort(2525);
+		smtpServer.setPort(port);
 		smtpServer.start();
 	}
 

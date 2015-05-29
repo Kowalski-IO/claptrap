@@ -16,12 +16,14 @@ import org.mapdb.DBMaker;
 
 public class MemoryStore {
 	
-	public final Set<String> SERVER_SET = new HashSet<String>();
-	public static final DB DB = DBMaker.newMemoryDB().make();
+	private final Set<String> servers = new HashSet<String>();
+	private static final DB DB = DBMaker.newMemoryDB().make();
+	
+	private int inboxSize = 500;
 	
 	public final void add(final Message message, final String mapName) {
 		ConcurrentNavigableMap<UUID, Object> treeMap = DB.getTreeMap(mapName);
-		if (treeMap.size() >= 500) {
+		if (treeMap.size() >= inboxSize) {
 			treeMap.clear();
 		}
 		treeMap.put(message.getUuid(), message);
@@ -53,5 +55,17 @@ public class MemoryStore {
 		treeMap.clear();
 		DB.commit();
 		return "All gone!";
+	}
+
+	public final Set<String> getServers() {
+		return servers;
+	}
+
+	public final int getBoxSize() {
+		return inboxSize;
+	}
+
+	public final void setInboxSize(final int inboxSize) {
+		this.inboxSize = inboxSize;
 	}
 }

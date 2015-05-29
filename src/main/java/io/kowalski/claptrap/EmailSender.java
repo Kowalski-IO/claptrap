@@ -22,7 +22,7 @@ public class EmailSender {
 		Properties properties = System.getProperties();
 
 		properties.setProperty("mail.smtp.host", host);
-		properties.setProperty("mail.smtp.port", "2525");
+		properties.setProperty("mail.smtp.port", "5555");
 
 		Session session = Session.getDefaultInstance(properties);
 
