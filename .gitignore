@@ -2,3 +2,5 @@
 .project
 .settings
 target
+src/main/java/io/kowalski/claptrap/EmailSender.java
+src/main/java/io/kowalski/claptrap/EmailWaiter.java
