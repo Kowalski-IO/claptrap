@@ -10,6 +10,8 @@ import org.apache.commons.cli.ParseException;
 
 public class CLI {
 	
+	private static final String VERSION = "1.0.0";
+	
 	public static void main(String[] args) {
 		parseArguments(args);
 	}
@@ -27,6 +29,10 @@ public class CLI {
 		
 		if(line.hasOption("help")) {
 			printHelp(options);
+		}
+		
+		if (line.hasOption("version")) {
+			printVersion();
 		}
 		
 		Settings settings = new Settings();
@@ -99,6 +105,13 @@ public class CLI {
 				.optionalArg(false)
 				.required(false)
 				.build());	
+		
+		options.addOption(Option.builder("v")
+				.longOpt("version")
+				.desc("displays the version of claptrap installed")
+				.hasArg(false)
+				.required(false)
+				.build());	
 
 
 		return options;
@@ -107,6 +120,11 @@ public class CLI {
 	private static void printHelp(Options options) {
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.printHelp("claptrap", options);
+		System.exit(0);
+	}
+	
+	private static void printVersion() {
+		System.out.println(VERSION);
 		System.exit(0);
 	}
 

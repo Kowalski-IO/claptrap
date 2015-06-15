@@ -6,7 +6,7 @@ var loadEmails = function() {
 	var server = queryParams['server'] || $('#server-list').val();
 	$.ajax({
 		type : 'GET',
-		url : '/emails/' + server,
+		url : 'emails/' + server,
 		dataType : 'json',
 		success : function(data) {
 			buildTable(data);
@@ -21,7 +21,7 @@ var loadEmails = function() {
 var loadServers = function() {
 	$.ajax({
 		type : 'GET',
-		url : '/servers',
+		url : 'servers',
 		dataType : 'json',
 		success : function(data) {
 			buildServerList(data);
@@ -35,7 +35,7 @@ var loadServers = function() {
 var deleteEmail = function(server, emailId) {
 	$.ajax({
 		type : 'DELETE',
-		url : '/email/' + server + '/' + emailId,
+		url : 'email/' + server + '/' + emailId,
 		dataType : 'json',
 		success : function(data) {
 			$('#' + emailId).remove();
@@ -49,7 +49,7 @@ var deleteEmail = function(server, emailId) {
 var deleteAllEmails = function(server) {
 	$.ajax({
 		type : 'DELETE',
-		url : '/email/' + server,
+		url : 'email/' + server,
 		dataType : 'json',
 		success : function(data) {
 			buildTable([]);
