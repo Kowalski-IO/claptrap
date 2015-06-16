@@ -3,7 +3,7 @@ var queryParams = [], hash;
 var loadEmail = function(server, uuid) {
 	$.ajax({
 		type : 'GET',
-		url : '/email/' + server + '/' + uuid,
+		url : 'email/' + server + '/' + uuid,
 		dataType : 'json',
 		success : function(data) {
 			showEmail(data);
