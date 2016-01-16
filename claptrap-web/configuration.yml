@@ -1,0 +1,35 @@
+# Claptrap 2.0.0 Configuration
+# Kowalski.io
+
+server:
+  rootPath: /api/
+  applicationConnectors:
+    - type: http
+      port: 8585
+  gzip:
+    enabled: false
+
+# Logging settings.
+logging:
+
+  level: WARN
+
+  loggers:
+
+    io.kowalski.claptrap: 
+      level: ALL
+
+    io.dropwizard:
+      level: ERROR
+
+    io.dropwizard.server.ServerFactory:
+      level: INFO
+
+    org.eclipse.jetty:
+      level: ERROR
+
+    com.hubspot:
+      level: ERROR
+
+    org.subethamail:
+      level: ERROR
