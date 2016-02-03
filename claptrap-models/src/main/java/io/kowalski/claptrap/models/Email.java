@@ -1,5 +1,8 @@
 package io.kowalski.claptrap.models;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -94,6 +97,14 @@ public class Email implements Comparable<Email>, Message {
 
     @Override
     public int compareTo(final Email o) {
+        final SimpleDateFormat sdf = new SimpleDateFormat();
+        try {
+            Date thisDate = sdf.parse(this.getReceivedOn());
+            Date oDate = sdf.parse(o.getReceivedOn());
+            return thisDate.compareTo(oDate);
+        } catch (ParseException e) {
+        }
+
         return o.receivedOn.compareTo(receivedOn);
     }
 }
