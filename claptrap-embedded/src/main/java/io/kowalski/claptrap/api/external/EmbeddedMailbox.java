@@ -68,7 +68,7 @@ public class EmbeddedMailbox implements Mailbox {
         return storageManager.getSMTPServer().getPort();
     }
 
-    public void close() throws Exception {
+    public void close() {
         if (storageManager != null) {
             storageManager.getHazelcast().shutdown();
             storageManager.getSMTPServer().stop();
