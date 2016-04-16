@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>io.kowalski</groupId>
 		<artifactId>claptrap</artifactId>
-		<version>2.2.0</version>
+		<version>2.2.1</version>
 	</parent>
 
 	<groupId>io.kowalski.claptrap.api</groupId>
@@ -54,7 +54,6 @@
 							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
 						</manifest>
 					</archive>
-					<minimizeJar>true</minimizeJar>
 					<createDependencyReducedPom>false</createDependencyReducedPom>
 				</configuration>
 				<executions>

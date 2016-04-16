@@ -1,14 +1,9 @@
 package io.kowalski;
 
-import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnector;
-
 import com.hubspot.dropwizard.guice.GuiceBundle;
 
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
-import io.dropwizard.lifecycle.ServerLifecycleListener;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.kowalski.claptrap.configuration.ClaptrapConfiguration;
@@ -20,10 +15,6 @@ public class Claptrap extends Application<ClaptrapConfiguration> {
 
     private final StorageManager storageManager;
     private final GuiceModule guiceModule;
-
-    private Server jettyServer;
-
-    private int httpPort;
 
     public Claptrap() {
         storageManager = new StorageManager();
@@ -50,34 +41,7 @@ public class Claptrap extends Application<ClaptrapConfiguration> {
 
     @Override
     public final void run(final ClaptrapConfiguration configuration, final Environment environment) throws Exception, RuntimeException {
-        environment.lifecycle().addServerLifecycleListener(new ServerLifecycleListener() {
-            @Override
-            public void serverStarted(final Server server) {
-                jettyServer = server;
-                for (final Connector connector : server.getConnectors()) {
-                    if (connector instanceof ServerConnector) {
-                        if ("application".equals(connector.getName())) {
-                            httpPort = ((ServerConnector) connector).getLocalPort();
-                        }
-                    }
-                }
-            }
-        });
-
         storageManager.startSMTPServer(configuration.getSmtpPort());
     }
 
-    public final void shutdown() throws Exception {
-        jettyServer.stop();
-        storageManager.getHazelcast().shutdown();
-        storageManager.getSMTPServer().stop();
-    }
-
-    public final int getHttpPort() {
-        return httpPort;
-    }
-
-    public final int getSmtpPort() {
-        return storageManager.getSMTPServer().getPort();
-    }
 }
