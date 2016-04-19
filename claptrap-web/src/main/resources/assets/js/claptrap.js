@@ -2,16 +2,15 @@
 //Kowalski.io
 
 // Mount Tags
-var serverSelectorRef;
+var environmentSelectorRef;
 var emailTableRef;
 var emailViewerRef;
 var modeSwitcherRef;
 
 riot.compile(function() {
-	serverSelectorRef = riot.mount('server-selector')[0];
-	emailTableRef = riot.mount('email-table')[0];
-	emailViewerRef = riot.mount('email-viewer')[0];
-	// modeSwitcherRef = riot.mount('mode-switcher')[0];
+	environmentSelectorRef = riot.mount('environment-selector')[0];
+//	emailTableRef = riot.mount('email-table')[0];
+//	emailViewerRef = riot.mount('email-viewer')[0];
 });
 
 var autoRefresh = false;
@@ -22,6 +21,6 @@ if (typeof(EventSource) !== "undefined") {
 }
 
 var refreshComponents = function() {
-	serverSelectorRef.refresh();
-	emailTableRef.refresh();
+	environmentSelectorRef.refresh();
+//	emailTableRef.refresh();
 }

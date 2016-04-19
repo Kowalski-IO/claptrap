@@ -30,7 +30,7 @@ public class EmailStorageService extends AbstractStorageService<Email, UUID> {
     @Override
     public void store(final List<Email> emails) {
         for (final Email email : emails) {
-            fetchMap(MAP_NAME).set(email.getId(), email);
+            store(email);
         }
     }
 
