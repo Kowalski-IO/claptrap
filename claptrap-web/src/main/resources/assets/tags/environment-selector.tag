@@ -28,7 +28,7 @@
   });
   
   refresh() {
-       $.get('./api/servers', function(data) { 
+       $.get('./api/environments', function(data) { 
             self.environments = data;
             self.update();
         });

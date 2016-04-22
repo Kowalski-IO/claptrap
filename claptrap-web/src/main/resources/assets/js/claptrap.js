@@ -9,8 +9,8 @@ var modeSwitcherRef;
 
 riot.compile(function() {
 	environmentSelectorRef = riot.mount('environment-selector')[0];
-//	emailTableRef = riot.mount('email-table')[0];
-//	emailViewerRef = riot.mount('email-viewer')[0];
+	emailTableRef = riot.mount('email-table')[0];
+	emailViewerRef = riot.mount('email-viewer')[0];
 });
 
 var autoRefresh = false;
@@ -22,5 +22,5 @@ if (typeof(EventSource) !== "undefined") {
 
 var refreshComponents = function() {
 	environmentSelectorRef.refresh();
-//	emailTableRef.refresh();
+	emailTableRef.refresh();
 }

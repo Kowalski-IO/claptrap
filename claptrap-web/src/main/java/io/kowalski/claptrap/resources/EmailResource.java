@@ -58,33 +58,33 @@ public class EmailResource {
     }
 
     @GET
-    @Path("/{serverName}")
-    public Collection<Email> allEmailsForServer(@PathParam("serverName") final String serverName) {
-        final List<Email> emails = Lists.newArrayList(emailService.retreive(new SqlPredicate("serverName == ".concat(serverName))));
+    @Path("/{environment}")
+    public Collection<Email> allEmailsForEnvironment(@PathParam("environment") final String environment) {
+        final List<Email> emails = Lists.newArrayList(emailService.retreive(new SqlPredicate("environment == ".concat(environment))));
         Collections.sort(emails);
         return emails;
     }
 
     @GET
-    @Path("/{serverName}/{emailID}")
-    public Email singleEmailFromServer(@PathParam("serverName") final String serverName, @PathParam("emailID") final UUID emailID) {
-        final String predicateString = "serverName == ".concat(serverName).concat(" AND id = ").concat(emailID.toString());
+    @Path("/{environment}/{emailID}")
+    public Email singleEmailFromEnvironment(@PathParam("environment") final String environment, @PathParam("emailID") final UUID emailID) {
+        final String predicateString = "environment == ".concat(environment).concat(" AND id = ").concat(emailID.toString());
         final List<Email> emails = Lists.newArrayList(emailService.retreive(new SqlPredicate(predicateString)));
         return emails.size() > 0 ? emails.get(0) : null;
     }
 
     @DELETE
-    @Path("/{serverName}")
-    public void deleteEmailFromServer(@PathParam("serverName") final String serverName) {
-        final String predicateString = "serverName == ".concat(serverName);
+    @Path("/{environment}")
+    public void deleteEmailFromEnvironment(@PathParam("environment") final String environment) {
+        final String predicateString = "environment == ".concat(environment);
         final List<Email> emails = Lists.newArrayList(emailService.retreive(new SqlPredicate(predicateString)));
         emailService.remove(emails);
     }
 
     @DELETE
-    @Path("/{serverName}/{emailID}")
-    public Email deleteEmailFromServer(@PathParam("serverName") final String serverName, @PathParam("emailID") final UUID emailID) {
-        final String predicateString = "serverName == ".concat(serverName).concat(" AND id = ").concat(emailID.toString());
+    @Path("/{environment}/{emailID}")
+    public Email deleteEmailFromEnvironment(@PathParam("environment") final String environment, @PathParam("emailID") final UUID emailID) {
+        final String predicateString = "environment == ".concat(environment).concat(" AND id = ").concat(emailID.toString());
         final List<Email> emails = Lists.newArrayList(emailService.retreive(new SqlPredicate(predicateString)));
 
         final Email email = emails.size() > 0 ? emails.get(0) : null;
@@ -97,10 +97,10 @@ public class EmailResource {
     }
 
     @GET
-    @Path("/broadcast/{serverName}")
+    @Path("/broadcast/{environment}")
     @Produces(SseFeature.SERVER_SENT_EVENTS)
-    public EventOutput listenToBroadcast(@PathParam("serverName") final String serverName) {
-        return broadcastService.generateEventOutput(serverName);
+    public EventOutput listenToBroadcast(@PathParam("environment") final String environment) {
+        return broadcastService.generateEventOutput(environment);
     }
 
 }

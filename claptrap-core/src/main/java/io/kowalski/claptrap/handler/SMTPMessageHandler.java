@@ -83,7 +83,7 @@ public class SMTPMessageHandler implements MessageHandler {
         for (final String recipient : recipients) {
             final Email email = new Email();
 
-            email.setServerName(retrieveServerName(from));
+            email.setEnvironment(retrieveServerName(from));
             email.setSender(from);
             email.setSubject(messageParser.getSubject());
 
@@ -108,7 +108,7 @@ public class SMTPMessageHandler implements MessageHandler {
     private Email createExceptionEmail(final Exception e) {
         final Email email = new Email();
 
-        email.setServerName("Claptrap.error");
+        email.setEnvironment("Claptrap.error");
         email.setSender("claptrap@claptrap-internal.jar");
         email.setSubject("Exception occurred processing email");
         email.setPlainBody(e.getMessage());

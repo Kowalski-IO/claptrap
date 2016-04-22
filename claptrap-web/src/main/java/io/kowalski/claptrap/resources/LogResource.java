@@ -60,33 +60,33 @@ public class LogResource {
     }
 
     @GET
-    @Path("/{environmentName}")
-    public Collection<Log> allLogsForEnvironment(@PathParam("environmentName") final String environmentName) {
-        final List<Log> logs = Lists.newArrayList(logService.retreive(new SqlPredicate("serverName == ".concat(environmentName))));
+    @Path("/{environment}")
+    public Collection<Log> allLogsForEnvironment(@PathParam("environment") final String environment) {
+        final List<Log> logs = Lists.newArrayList(logService.retreive(new SqlPredicate("environment == ".concat(environment))));
         Collections.sort(logs);
         return logs;
     }
 
     @GET
-    @Path("/{environmentName}/{logID}")
-    public Log singleLogFromEnvironment(@PathParam("environmentName") final String environmentName, @PathParam("logID") final UUID logID) {
-        final String predicateString = "serverName == ".concat(environmentName).concat(" AND id = ").concat(logID.toString());
+    @Path("/{environment}/{logID}")
+    public Log singleLogFromEnvironment(@PathParam("environment") final String environment, @PathParam("logID") final UUID logID) {
+        final String predicateString = "environment == ".concat(environment).concat(" AND id = ").concat(logID.toString());
         final List<Log> logs = Lists.newArrayList(logService.retreive(new SqlPredicate(predicateString)));
         return logs.size() > 0 ? logs.get(0) : null;
     }
 
     @DELETE
-    @Path("/{environmentName}")
-    public void deleteLogsFromEnvironment(@PathParam("environmentName") final String environmentName) {
-        final String predicateString = "serverName == ".concat(environmentName);
+    @Path("/{environment}")
+    public void deleteLogsFromEnvironment(@PathParam("environment") final String environment) {
+        final String predicateString = "environment == ".concat(environment);
         final List<Log> logs = Lists.newArrayList(logService.retreive(new SqlPredicate(predicateString)));
         logService.remove(logs);
     }
 
     @DELETE
-    @Path("/{environmentName}/{logID}")
-    public Log deleteLogFromServer(@PathParam("environmentName") final String environmentName, @PathParam("logID") final UUID logID) {
-        final String predicateString = "serverName == ".concat(environmentName).concat(" AND id = ").concat(logID.toString());
+    @Path("/{environment}/{logID}")
+    public Log deleteLogFromEnvironment(@PathParam("environment") final String environment, @PathParam("logID") final UUID logID) {
+        final String predicateString = "environment == ".concat(environment).concat(" AND id = ").concat(logID.toString());
         final List<Log> logs = Lists.newArrayList(logService.retreive(new SqlPredicate(predicateString)));
 
         final Log log = logs.size() > 0 ? logs.get(0) : null;
