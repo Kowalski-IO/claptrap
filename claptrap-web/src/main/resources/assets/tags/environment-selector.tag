@@ -11,7 +11,7 @@
       <li if = { environments.length === 0 } >
         <p class="navbar-text">No Environments Found</p>
       </li>
-    </ul>
+  </ul>
 
   <script>
   
@@ -41,7 +41,7 @@
   environmentSelect(event) {
     this.environmentSelected = true;
     this.selectedEnvironment = event.target.dataset.message;
-    this.environmentLabel = event.target.dataset.message;
+    this.environmentLabel = '[ENV] ' + event.target.dataset.message;
     this.update();
     emailTableRef.environmentChange();
   }

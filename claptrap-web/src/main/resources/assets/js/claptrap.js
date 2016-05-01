@@ -3,12 +3,13 @@
 
 // Mount Tags
 var environmentSelectorRef;
+var modeSelectorRef;
 var emailTableRef;
 var emailViewerRef;
-var modeSwitcherRef;
 
 riot.compile(function() {
 	environmentSelectorRef = riot.mount('environment-selector')[0];
+	modeSelectorRef = riot.mount('mode-selector')[0];
 	emailTableRef = riot.mount('email-table')[0];
 	emailViewerRef = riot.mount('email-viewer')[0];
 });

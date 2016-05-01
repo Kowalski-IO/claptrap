@@ -1,7 +1,7 @@
 <email-table>
 
     <div if ={ environmentSelectorRef.environmentSelected === false }>
-        <h2 class="email-table-message">Please pick an environment from the selector above.</h2>
+        <h2 class="email-table-message">Please select an environment.</h2>
         <object type="image/svg+xml" class="claptrap-logo" data="img/claptrap.svg">Your browser does not support SVG</object>
     </div>
 
@@ -43,11 +43,7 @@
         var self = this;
         var emails = [];
         var watchEventSource;
-        
-        this.on('mount', function() {
-            self.refresh();
-          });
-        
+
         environmentChange() {
         	self.refresh();
         	self.watch();
@@ -66,6 +62,11 @@
   
         refresh() {
             var environmentName = environmentSelectorRef.getSelectedEnvironment();
+            
+            if (environmentName == undefined) {
+                return;
+            }
+            
            $.get('./api/emails/' + environmentName, function(data) {
                 self.emails = data;
                 self.update();
