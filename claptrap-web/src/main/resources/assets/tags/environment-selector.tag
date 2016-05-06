@@ -15,13 +15,13 @@
 
   <script>
   
-  var self = this;
-  
   this.environmentSelected = false;
   this.selectedEnvironment = undefined;
   this.environmentLabel = "Select an Environment";
 
   this.environments = [];
+  
+  var self = this;
   
   this.on('mount', function() {
     self.refresh();
@@ -34,18 +34,14 @@
         });
     }
     
-    getSelectedEnvironment() {
-        return this.selectedEnvironment
-    }
-  
   environmentSelect(event) {
     this.environmentSelected = true;
     this.selectedEnvironment = event.target.dataset.message;
     this.environmentLabel = '[ENV] ' + event.target.dataset.message;
     this.update();
-    emailTableRef.environmentChange();
+    this.observable.trigger('environmentSelected', this.selectedEnvironment);
   }
-
+  
   </script>
 
 </environment-selector>

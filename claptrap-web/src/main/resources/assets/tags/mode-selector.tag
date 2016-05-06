@@ -25,6 +25,7 @@
         this.selectedMode = event.target.dataset.message;
         this.modeLabel = '[MODE] ' + event.target.dataset.message;
         this.update();
+        this.observable.trigger('modeSelected', this.selectedMode);
     }
   
   </script>

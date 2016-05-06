@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Claptrap 2.3.0</title>
+  <title>Claptrap 2.3.1</title>
 
   <link rel="icon" href="favicon.png">
   <link href="css/claptrap.css" rel="stylesheet">
@@ -14,9 +14,9 @@
 <body>
 
   <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
+    <div class="container-fluid">
       <div class="navbar-header">
-        <a class="navbar-brand" href="./">Claptrap 2.3.0</a>
+        <a class="navbar-brand" href="./">Claptrap 2.3.1</a>
       </div>
       <div id="navbar" class="navbar-collapse collapse">
         <environment-selector></environment-selector>
@@ -25,7 +25,6 @@
         <ul class="nav navbar-nav navbar-right">
           <li><a onclick="refreshComponents()"><img src="img/refresh.svg" title="Refresh Environments & Content"></a></li>
           <li><a onclick="emailTableRef.deleteAllEmails()"><img src="img/delete-all.svg" title="Delete All for Selected Environment"></a></li>
-          <li><a href="./"><span class="glyphicon glyphicon-question-sign" title="Help"></span></a></li>
         </ul>
         
         <form class="navbar-form navbar-right" role="search">
@@ -42,27 +41,24 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-12">
-        <email-table></email-table>
+        <data-viewer></data-viewer>
       </div>
     </div>
   </div>
 
-  <email-viewer></email-viewer>
-    <script src="js/jquery-2.1.4.min.js"></script>
+	<email-viewer></email-viewer>
+	<script src="js/jquery-2.1.4.min.js"></script>
     <script src="js/riot+compiler.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     
     <script type="riot/tag" src="tags/environment-selector.tag"></script>
     <script type="riot/tag" src="tags/mode-selector.tag"></script>
+    <script type="riot/tag" src="tags/data-viewer.tag"></script>
     <script type="riot/tag" src="tags/email-table.tag"></script>
     <script type="riot/tag" src="tags/email-viewer.tag"></script>
     <script type="riot/tag" src="tags/raw-tag.tag"></script>
     
     <script src="js/claptrap.js"></script>
     
-    <script>
-    
-    </script>
-
   </body>
   </html>
