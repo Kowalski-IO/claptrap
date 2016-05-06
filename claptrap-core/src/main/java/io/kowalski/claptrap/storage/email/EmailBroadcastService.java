@@ -25,7 +25,7 @@ public class EmailBroadcastService implements BroadcastService<Email, String> {
 
     @Override
     public void broadcast(final Email email) {
-        final SseBroadcaster broadcaster = fetchBroadcaster(email.getServerName());
+        final SseBroadcaster broadcaster = fetchBroadcaster(email.getEnvironment());
 
         final OutboundEvent.Builder eventBuilder = new OutboundEvent.Builder();
         final OutboundEvent event = eventBuilder.name("message")
