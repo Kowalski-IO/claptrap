@@ -1,8 +1,7 @@
 <email-table>
 
     <div if ={ emails.length === 0 }>
-        <h2 class="email-table-message">No emails caught for selected environment.</h2>
-        <object type="image/svg+xml" class="claptrap-logo" data="img/claptrap.svg">Your browser does not support SVG</object>
+        <h2 class="table-message">No emails captured for selected environment.</h2>
     </div>
     
     <div if = { emails.length > 0 } class="table-responsive">
@@ -25,7 +24,7 @@
 	                <td class="col-md-2">{ subject }</td>
 	                <td class="col-md-4">{ plainBody }</td>
 	                <td class="col-md-1">
-	                    <a onclick="{ parent.expand }"><img class="action-icon" src="img/open.svg" title="read" /></span></a>&nbsp;
+	                    <a onclick="{ parent.expand }"><img class="action-icon" src="img/open.svg" title="read" /></span></a>
 	                    <a onclick="{ parent.delete }"><img class="action-icon" src="img/delete.svg" title="delete" /></span></a>
 	               </td>
 	            </tr>

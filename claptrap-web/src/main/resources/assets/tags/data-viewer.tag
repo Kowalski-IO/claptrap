@@ -1,6 +1,6 @@
 <data-viewer>
       
-      <email-table name="emailTable"></email-table>
+      <email-table if = { selectedMode == 'email' && selectedEnvironment != undefined } name="emailTable"></email-table>
       
 <script>
 
@@ -16,6 +16,7 @@
   
   this.observable.on('modeSelected', function(mode) {
     self.selectedMode = mode;
+    self.update();
   });
   
   
