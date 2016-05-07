@@ -34,7 +34,14 @@
   refresh() {
        $.get('./api/environments', function(data) { 
             self.environments = data;
+            
+            if (self.environments.length < 1) {
+                self.environmentSelected = false;
+                self.observable.trigger('environmentSelected', undefined);
+            }
+            
             self.update();
+            
         });
     }
     
