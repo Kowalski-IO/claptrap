@@ -12,7 +12,7 @@
                     <th>Level</th> 
                     <th>Declaring Class</th> 
                     <th>Line Number</th>
-                    <th>Message</th>
+                    <th>Thrown Exception Class</th>
                     <th>Actions</th>
                 </tr> 
             </thead>
@@ -22,10 +22,10 @@
                     <td class="col-md-1">{ level }</td>
                     <td class="col-md-3">{ throwable.stackTrace[0].declaringClass }</td>
                     <td class="col-md-1">{ throwable.stackTrace[0].lineNumber }</td>
-                    <td class="col-md-5">{ message }</td>
+                    <td class="col-md-5">{ throwableClass }</td>
                     <td class="col-md-1 text-center">
-                        <a onclick="{ parent.expandLog }"><img class="action-icon" src="img/open.svg" title="read" /></span></a>
-                        <a onclick="{ parent.deleteLog }"><img class="action-icon" src="img/delete.svg" title="delete" /></span></a>
+                        <a onclick="{ parent.expandLog }"><img class="action-icon action" src="img/open.svg" title="read" /></span></a>
+                        <a onclick="{ parent.deleteLog }"><img class="action-icon action" src="img/delete.svg" title="delete" /></span></a>
                    </td>
                 </tr>
             </tbody>
@@ -42,7 +42,7 @@
         self.watchEventSource;
 
         expandLog(event) {
-            this.observable.trigger('expandLog', event.item);
+            self.observable.trigger('expandLog', event.item);
         }
         
         changeEnvironment(environment) {

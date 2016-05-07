@@ -21,6 +21,14 @@
   
   self.observable.on('modeSelected', function(mode) {
     self.selectedMode = mode;
+     switch (self.selectedMode) {
+        case "email":
+            self.tags.emailTable.refresh();
+            break;
+        case "logs":
+            self.tags.logTable.refresh();
+            break;
+    }
     self.update();
   });
   
@@ -36,6 +44,17 @@
             break;
         case "logs":
             self.tags.logTable.deleteAllLogs();
+            break;
+    }
+  });
+  
+  self.observable.on('updateFilter', function(filterText) {
+    switch (self.selectedMode) {
+        case "email":
+            self.tags.emailTable.filter(filterText);
+            break;
+        case "logs":
+            self.tags.logTable.filter(filterText);
             break;
     }
   });

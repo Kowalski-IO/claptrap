@@ -8,7 +8,7 @@
     
     <form class="navbar-form navbar-right" role="search">
         <div class="form-group">
-            <input type="text" class="form-control" placeholder="filter table">
+            <input onkeyup= { updateFilter } type="text" class="form-control filter" placeholder="filter table">
         </div>
     </form>
     
@@ -22,6 +22,10 @@
     
         deleteAll() {
              self.observable.trigger('deleteAll');
+        }
+        
+        updateFilter(e) {
+            self.observable.trigger('updateFilter', e.currentTarget.value);
         }
     
     </script>
