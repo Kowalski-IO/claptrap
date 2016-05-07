@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.media.sse.EventOutput;
@@ -19,7 +20,7 @@ public class EmailBroadcastService implements BroadcastService<Email, String> {
     private final ConcurrentHashMap<String, SseBroadcaster> broadcasterMap;
 
     @Inject
-    public EmailBroadcastService(final ConcurrentHashMap<String, SseBroadcaster> broadcasterMap) {
+    public EmailBroadcastService(@Named("emailBroadcastMap") final ConcurrentHashMap<String, SseBroadcaster> broadcasterMap) {
         this.broadcasterMap = broadcasterMap;
     }
 
@@ -37,30 +38,30 @@ public class EmailBroadcastService implements BroadcastService<Email, String> {
     }
 
     @Override
-    public void broadcast(final List<Email> broadcastables) {
-        for (final Email email : broadcastables) {
+    public void broadcast(final List<Email> emails) {
+        for (final Email email : emails) {
             broadcast(email);
         }
     }
 
     @Override
-    public EventOutput generateEventOutput(final String serverName) {
-        final SseBroadcaster broadcaster = fetchBroadcaster(serverName);
+    public EventOutput generateEventOutput(final String environmentName) {
+        final SseBroadcaster broadcaster = fetchBroadcaster(environmentName);
         final EventOutput eventOutput = new EventOutput();
         broadcaster.add(eventOutput);
         return eventOutput;
     }
 
     @Override
-    public SseBroadcaster fetchBroadcaster(final String serverName) {
+    public SseBroadcaster fetchBroadcaster(final String environmentName) {
         final Optional<SseBroadcaster> optionalBroadcaster =
-                Optional.ofNullable(broadcasterMap.get(serverName));
+                Optional.ofNullable(broadcasterMap.get(environmentName));
 
         SseBroadcaster broadcaster;
 
         if (!optionalBroadcaster.isPresent()) {
             broadcaster = new SseBroadcaster();
-            broadcasterMap.put(serverName, broadcaster);
+            broadcasterMap.put(environmentName, broadcaster);
         } else {
             broadcaster = optionalBroadcaster.get();
         }

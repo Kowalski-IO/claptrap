@@ -4,8 +4,8 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">{ email.subject }</h4>
+        <h4 class="modal-title pull-left">{ email.subject }</h4>
+        <img class="action pull-right" data-dismiss="modal" src="img/close.svg">
       </div>
       <div class="modal-body">
         <table class="table table-condensed">  
@@ -61,13 +61,13 @@
 
     <script>
         var self = this;
-        var email;
+        self.email = undefined;
         
-        showEmail(emailToView) {
-            self.email = emailToView;
+        this.observable.on('expandEmail', function(emailToExpand) {
+            self.email = emailToExpand;
             self.update();
             $('#emailViewer').modal('show');
-        }
+        });
         
     </script>
 

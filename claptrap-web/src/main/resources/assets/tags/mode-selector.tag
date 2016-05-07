@@ -16,19 +16,18 @@
   
     var self = this;
     
-    this.modeSelected = false;
-    this.selectedMode = undefined;
-    this.modeLabel = "Select a Mode";
+    self.modeSelected = false;
+    self.selectedMode = undefined;
+    self.modeLabel = "Select a Mode";
   
     modeSelect(mode) {
-        this.modeSelected = true;
-        this.selectedMode = event.target.dataset.message;
-        this.modeLabel = '[MODE] ' + event.target.dataset.message;
-        this.update();
-        this.observable.trigger('modeSelected', this.selectedMode);
+        self.modeSelected = true;
+        self.selectedMode = event.target.dataset.message;
+        self.modeLabel = '[MODE] ' + event.target.dataset.message;
+        self.update();
+        self.observable.trigger('modeSelected', this.selectedMode);
     }
   
   </script>
-
 
 </mode-selector>

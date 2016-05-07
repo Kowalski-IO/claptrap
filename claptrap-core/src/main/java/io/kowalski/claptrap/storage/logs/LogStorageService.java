@@ -12,19 +12,24 @@ import com.hazelcast.query.Predicate;
 
 import io.kowalski.claptrap.models.Log;
 import io.kowalski.claptrap.storage.AbstractStorageService;
+import io.kowalski.claptrap.storage.BroadcastService;
 
 public class LogStorageService extends AbstractStorageService<Log, UUID> {
 
     private final static String MAP_NAME = "logs";
 
+    private final BroadcastService<Log, String> broadcastService;
+
     @Inject
-    public LogStorageService(final HazelcastInstance hazelcast) {
+    public LogStorageService(final HazelcastInstance hazelcast, final BroadcastService<Log, String> broadcastService) {
         super(hazelcast, Log.class, MAP_NAME);
+        this.broadcastService = broadcastService;
     }
 
     @Override
     public void store(final Log log) {
         fetchMap(MAP_NAME).set(log.getId(), log);
+        broadcastService.broadcast(log);
     }
 
     @Override

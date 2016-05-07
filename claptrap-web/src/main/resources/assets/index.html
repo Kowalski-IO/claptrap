@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Claptrap 2.3.1</title>
+  <title>Claptrap</title>
 
   <link rel="icon" href="favicon.png">
   <link href="css/bootstrap.css" rel="stylesheet">
@@ -23,17 +23,8 @@
         <environment-selector></environment-selector>
         <mode-selector></mode-selector>
         
-        <ul class="nav navbar-nav navbar-right">
-          <li><a onclick="refreshComponents()"><img src="img/refresh.svg" title="Refresh Environments & Content"></a></li>
-          <li><a onclick="emailTableRef.deleteAllEmails()"><img src="img/delete-all.svg" title="Delete All for Selected Environment"></a></li>
-        </ul>
+        <action-bar></action-bar>
         
-        <form class="navbar-form navbar-right" role="search">
-	        <div class="form-group">
-	            <input type="text" class="form-control" placeholder="filter table">
-	        </div>
-        </form>
-
       </div>
     </div>
   </nav>
@@ -53,9 +44,11 @@
     <script src="js/bootstrap.min.js"></script>
     
     <script type="riot/tag" src="tags/environment-selector.tag"></script>
+    <script type="riot/tag" src="tags/action-bar.tag"></script>
     <script type="riot/tag" src="tags/mode-selector.tag"></script>
     <script type="riot/tag" src="tags/data-viewer.tag"></script>
     <script type="riot/tag" src="tags/email-table.tag"></script>
+    <script type="riot/tag" src="tags/log-table.tag"></script>
     <script type="riot/tag" src="tags/email-viewer.tag"></script>
     <script type="riot/tag" src="tags/raw-tag.tag"></script>
     

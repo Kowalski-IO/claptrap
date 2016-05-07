@@ -9,21 +9,25 @@
         </ul>
       </li>
       <li if = { environments.length === 0 } >
-        <p class="navbar-text">No Environments Found</p>
+        <p class="navbar-text">No Environments Captured</p>
       </li>
   </ul>
 
   <script>
   
-  this.environmentSelected = false;
-  this.selectedEnvironment = undefined;
-  this.environmentLabel = "Select an Environment";
-
-  this.environments = [];
-  
   var self = this;
   
-  this.on('mount', function() {
+  self.environmentSelected = false;
+  self.selectedEnvironment = undefined;
+  self.environmentLabel = "Select an Environment";
+
+  self.environments = [];
+  
+  self.on('mount', function() {
+    self.refresh();
+  });
+  
+  self.observable.on('manualRefresh', function(mode) {
     self.refresh();
   });
   
@@ -35,11 +39,11 @@
     }
     
   environmentSelect(event) {
-    this.environmentSelected = true;
-    this.selectedEnvironment = event.target.dataset.message;
-    this.environmentLabel = '[ENV] ' + event.target.dataset.message;
-    this.update();
-    this.observable.trigger('environmentSelected', this.selectedEnvironment);
+    self.environmentSelected = true;
+    self.selectedEnvironment = event.target.dataset.message;
+    self.environmentLabel = '[ENV] ' + event.target.dataset.message;
+    self.update();
+    self.observable.trigger('environmentSelected', this.selectedEnvironment);
   }
   
   </script>

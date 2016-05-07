@@ -23,9 +23,9 @@
 	                <td class="col-md-3">{ recipient }</td>
 	                <td class="col-md-2">{ subject }</td>
 	                <td class="col-md-4">{ plainBody }</td>
-	                <td class="col-md-1">
-	                    <a onclick="{ parent.expand }"><img class="action-icon" src="img/open.svg" title="read" /></span></a>
-	                    <a onclick="{ parent.delete }"><img class="action-icon" src="img/delete.svg" title="delete" /></span></a>
+	                <td class="col-md-1 text-center">
+	                    <a onclick="{ parent.expandEmail }"><img class="action-icon" src="img/open.svg" title="read" /></span></a>
+	                    <a onclick="{ parent.deleteEmail }"><img class="action-icon" src="img/delete.svg" title="delete" /></span></a>
 	               </td>
 	            </tr>
 	        </tbody>
@@ -33,15 +33,16 @@
     </div>
     
     <script>
-        
-         this.selectedEnvironment = undefined;
-        
+    
         var self = this;
-        var emails = [];
-        var watchEventSource;
+        
+        self.selectedEnvironment = undefined;
+        
+        self.emails = [];
+        self.watchEventSource;
 
-        expand(event) {
-        	emailViewerRef.showEmail(event.item);
+        expandEmail(event) {
+            self.observable.trigger('expandEmail', event.item);
         }
         
         changeEnvironment(environment) {
@@ -50,7 +51,7 @@
             self.watch();
         }
         
-        delete(event) {
+        deleteEmail(event) {
         	var email = event.item;
         	self.ajaxDeleteEmail(email.id);
         	var index = self.emails.indexOf(email)
@@ -76,9 +77,9 @@
         	}
         	self.watchEventSource = new EventSource('./api/emails/broadcast/' + self.selectedEnvironment);
         	self.watchEventSource.onmessage = function(message) {
-        		   var newEmail = message.data;
-        		   self.emails.unshift(JSON.parse(newEmail));
-        		   self.update();
+    		   var newEmail = message.data;
+    		   self.emails.unshift(JSON.parse(newEmail));
+    		   self.update();
         	}
         }
         

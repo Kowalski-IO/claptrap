@@ -15,6 +15,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang3.SerializationUtils;
+import org.glassfish.jersey.media.sse.EventOutput;
+import org.glassfish.jersey.media.sse.SseFeature;
 
 import com.google.inject.Inject;
 import com.hazelcast.query.Predicate;
@@ -22,6 +24,7 @@ import com.hazelcast.query.SqlPredicate;
 
 import io.kowalski.claptrap.api.PredicateWrapper;
 import io.kowalski.claptrap.models.Log;
+import io.kowalski.claptrap.storage.BroadcastService;
 import io.kowalski.claptrap.storage.logs.LogStorageService;
 import jersey.repackaged.com.google.common.collect.Lists;
 
@@ -31,10 +34,12 @@ import jersey.repackaged.com.google.common.collect.Lists;
 public class LogResource {
 
     private final LogStorageService logService;
+    private final BroadcastService<Log, String> broadcastService;
 
     @Inject
-    public LogResource(final LogStorageService logService) {
+    public LogResource(final LogStorageService logService, final BroadcastService<Log, String> broadcastService) {
         this.logService = logService;
+        this.broadcastService = broadcastService;
     }
 
     @GET
@@ -62,15 +67,18 @@ public class LogResource {
     @GET
     @Path("/{environment}")
     public Collection<Log> allLogsForEnvironment(@PathParam("environment") final String environment) {
-        final List<Log> logs = Lists.newArrayList(logService.retreive(new SqlPredicate("environment == ".concat(environment))));
+        final List<Log> logs = Lists
+                .newArrayList(logService.retreive(new SqlPredicate("environment == ".concat(environment))));
         Collections.sort(logs);
         return logs;
     }
 
     @GET
     @Path("/{environment}/{logID}")
-    public Log singleLogFromEnvironment(@PathParam("environment") final String environment, @PathParam("logID") final UUID logID) {
-        final String predicateString = "environment == ".concat(environment).concat(" AND id = ").concat(logID.toString());
+    public Log singleLogFromEnvironment(@PathParam("environment") final String environment,
+            @PathParam("logID") final UUID logID) {
+        final String predicateString = "environment == ".concat(environment).concat(" AND id = ")
+                .concat(logID.toString());
         final List<Log> logs = Lists.newArrayList(logService.retreive(new SqlPredicate(predicateString)));
         return logs.size() > 0 ? logs.get(0) : null;
     }
@@ -85,8 +93,10 @@ public class LogResource {
 
     @DELETE
     @Path("/{environment}/{logID}")
-    public Log deleteLogFromEnvironment(@PathParam("environment") final String environment, @PathParam("logID") final UUID logID) {
-        final String predicateString = "environment == ".concat(environment).concat(" AND id = ").concat(logID.toString());
+    public Log deleteLogFromEnvironment(@PathParam("environment") final String environment,
+            @PathParam("logID") final UUID logID) {
+        final String predicateString = "environment == ".concat(environment).concat(" AND id = ")
+                .concat(logID.toString());
         final List<Log> logs = Lists.newArrayList(logService.retreive(new SqlPredicate(predicateString)));
 
         final Log log = logs.size() > 0 ? logs.get(0) : null;
@@ -96,6 +106,13 @@ public class LogResource {
         }
 
         return log;
+    }
+
+    @GET
+    @Path("/broadcast/{environment}")
+    @Produces(SseFeature.SERVER_SENT_EVENTS)
+    public EventOutput listenToBroadcast(@PathParam("environment") final String environment) {
+        return broadcastService.generateEventOutput(environment);
     }
 
 }
