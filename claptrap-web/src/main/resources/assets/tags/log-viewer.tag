@@ -5,7 +5,7 @@
         <div class="modal-content">
     
           <div class="modal-header">
-            <h4 class="modal-title pull-left">{ log.throwableClass }</h4>
+            <h4 class="modal-title pull-left">Log Info</h4>
             <img class="action pull-right" data-dismiss="modal" src="img/close.svg">
           </div>
     
@@ -14,8 +14,8 @@
               <thead>
                 <tr> 
                   <th>Received</th> 
-                  <th>Sender</th> 
-                  <th>Recipient</th> 
+                  <th>Environment</th> 
+                  <th>Level</th> 
                 </tr> 
               </thead>
               <tbody> 
@@ -26,6 +26,53 @@
                 </tr>
               </tbody>
             </table>
+            
+            <hr>
+            
+            <h4>Logger Message</h4>
+            <span>{ log.message }</span>
+            
+            <hr>
+            
+            <h4>Throwable</h4>
+            <table class="table table-condensed">  
+              <thead>
+                <tr> 
+                  <th>Throwable Class</th> 
+                  <th>Detail Message</th>  
+                </tr> 
+              </thead>
+              <tbody> 
+                <tr> 
+                  <td>{ log.throwableClass }</td>
+                  <td>{ log.throwable.detailMessage }</td>
+                </tr>
+              </tbody>
+            </table>
+            
+            <hr>
+            
+            <h4>Stack Trace</h4>
+             <table class="table table-condensed">  
+              <thead>
+                <tr> 
+                  <th>File Name</th> 
+                  <th>Declaring Class</th> 
+                  <th>Method</th>
+                  <th>Line Number</th>  
+                </tr> 
+              </thead>
+              <tbody> 
+                <tr each= { log.throwable.stackTrace} no-reorder> 
+                  <td>{ fileName }</td>
+                  <td>{ declaringClass }</td>
+                  <td>{ methodName }</td>
+                  <td>{ lineNumber }</td>
+                </tr>
+              </tbody>
+            </table>
+            
+            
           </div>
     
         </div>

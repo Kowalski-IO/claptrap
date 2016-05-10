@@ -16,8 +16,7 @@
 	                <th>Actions</th>
 	            </tr> 
 	        </thead>
-	        <tbody class="list"> 
-	            <tr each = { emails }> 
+	        <tbody class="list"><tr each = { emails } no-reorder> 
 	                <td class="col-md-2 received">{ received }</td>
 	                <td class="col-md-1 sender">{ sender }</td>
 	                <td class="col-md-3 recipient">{ recipient }</td>
@@ -41,12 +40,6 @@
         self.emails = [];
         self.watchEventSource;
         
-        self.emailTableListJs = undefined;
-        
-        self.tableOptions = {
-            valueNames: [ 'received', 'sender', 'recipient', 'subject', 'plainBody' ]
-        };
-        
         expandEmail(event) {
             self.observable.trigger('expandEmail', event.item);
         }
@@ -64,10 +57,6 @@
         	self.emails.splice(index, 1)
         }
         
-        filter(filterText) {
-            self.emailTableListJs.search(filterText);
-        }
-  
         refresh() {
             if (self.selectedEnvironment == undefined) {
                 return;
@@ -76,9 +65,6 @@
            $.get('./api/emails/' + self.selectedEnvironment, function(data) {
                 self.emails = data;
                 self.update();
-            })
-            .done(function() {
-                 self.emailTableListJs = new List('emailTable', self.tableOptions);
             });
         }
         
@@ -101,7 +87,10 @@
              $.ajax({
                 url: deleteUrl,
                 type: 'DELETE',
-                complete: function(data) { self.refresh(); }
+                complete: function(data) {
+                    self.emails = []; 
+                    self.refresh();
+                }
             });
         }
         

@@ -1,15 +1,6 @@
 _____________________________________
-|      Claptap Email Catch-All      |
-|          Version 2.0.0            |
-|          Kowalski.io              |
+|  Claptrap Everything Interceptor  |
+|          Version 2.3.1            |
+|           Kowalski.io             |
 |  <https://claptrap.kowalski.io>   |
--------------------------------------  
-       ,
-       |
-    ]  |.-._
-     \|"(0)"| _]
-     `|=\#/=|\/
-      :  _  :
-       \/_\/ 
-        |=| 
-        `-' Hello Minion! Feed me your emails!
+-------------------------------------
