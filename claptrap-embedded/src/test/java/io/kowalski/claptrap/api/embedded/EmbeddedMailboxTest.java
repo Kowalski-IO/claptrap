@@ -58,12 +58,12 @@ public class EmbeddedMailboxTest {
     }
 
     @Test
-    public void allEmailsForServer() throws ClaptrapException, EmailException {
-        seedForServerEmails();
+    public void allEmailsForEnvironment() throws ClaptrapException, EmailException {
+        seedForEnvironmentEmails();
 
-        final Collection<Email> fetchedEmails = mailbox.fetchAllForServer("test.claptrap.kowalski.io");
+        final Collection<Email> fetchedEmails = mailbox.fetchAllForEnvironment("test.claptrap.kowalski.io");
 
-        assertEquals("seedForServerEmails sends 2 emails total for server forServer", 2, fetchedEmails.size());
+        assertEquals("seedForEnvironmentEmails sends 2 emails total for server forEnvironment", 2, fetchedEmails.size());
 
     }
 
@@ -77,7 +77,7 @@ public class EmbeddedMailboxTest {
 
         final List<Email> fetchedEmails = Lists.newArrayList(mailbox.fetchForCriteria(filter));
 
-        assertEquals("seedForServerEmails sends 1 emails total to Nugget", 1, fetchedEmails.size());
+        assertEquals("seedForEnvironmentEmails sends 1 emails total to Nugget", 1, fetchedEmails.size());
 
         assertEquals("nugget@kowalski.io", fetchedEmails.get(0).getRecipient());
     }
@@ -99,14 +99,14 @@ public class EmbeddedMailboxTest {
 
     }
 
-    private void seedForServerEmails() throws EmailException {
+    private void seedForEnvironmentEmails() throws EmailException {
         final SimpleEmail email = new SimpleEmail();
         email.setHostName(hostname);
         email.setSmtpPort(port);
 
         email.addTo("john.johnson@gmail.com", "John Johnson");
         email.addTo("frank@underwood.us", "Frank Underwood");
-        email.setFrom("forServer@test.claptrap.kowalski.io", "Claptrap");
+        email.setFrom("forEnvironment@test.claptrap.kowalski.io", "Claptrap");
         email.setSubject("Test simple email");
 
         email.setMsg("This is a simple email test to see if Claptrap actually works!");

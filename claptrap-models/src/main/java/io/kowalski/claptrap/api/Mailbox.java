@@ -18,15 +18,15 @@ public interface Mailbox {
     Collection<Email> fetchAll() throws ClaptrapException;
 
     /**
-     * Fetch all of the emails for a particular server stored by the targeted
+     * Fetch all of the emails for a particular environment stored by the targeted
      * Claptrap instance.
      *
-     * @param serverName for the emails to fetch
-     * @return all of the emails for a particular server stored in this
+     * @param environment for the emails to fetch
+     * @return all of the emails for a particular environment stored in this
      *         instance.
      * @throws ClaptrapException if the emails could not be fetched or parsed.
      */
-    Collection<Email> fetchAllForServer(final String serverName) throws ClaptrapException;
+    Collection<Email> fetchAllForEnvironment(final String environment) throws ClaptrapException;
 
     /**
      * Fetches emails for a given predicate. Uses the Hazelcast predicate API

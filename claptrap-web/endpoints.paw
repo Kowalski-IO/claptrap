@@ -158,7 +158,7 @@
     </object>
     <object type="LMREQUEST" id="z112">
         <attribute name="uuid" type="string">C61051B9-3160-4A4E-BC45-125050F666C8</attribute>
-        <attribute name="url" type="string">http://localhost:8585/api/emails/kowalski.io</attribute>
+        <attribute name="url" type="string">http://solutionsutils:4567/api/emails/kowalski.local</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
         <attribute name="sendcookies" type="bool">1</attribute>
         <attribute name="redirectmethod" type="bool">0</attribute>

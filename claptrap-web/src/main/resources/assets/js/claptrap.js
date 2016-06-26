@@ -6,5 +6,7 @@ const observableBus = {
 	observable : riot.observable()
 };
 
+const msgPleaseSelect = 'Please pick a mode bitch';
+
 riot.mixin(observableBus);
 riot.mount('*');

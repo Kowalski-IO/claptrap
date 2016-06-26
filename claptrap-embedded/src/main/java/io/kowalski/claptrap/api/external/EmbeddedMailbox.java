@@ -37,17 +37,17 @@ public class EmbeddedMailbox implements Mailbox {
     }
 
     /**
-     * Fetch all of the emails for a particular server stored by the embedded
+     * Fetch all of the emails for a particular environment stored by the embedded
      * Claptrap instance.
      *
-     * @param serverName for the emails to fetch
-     * @return all of the emails for a particular server stored in this
+     * @param environment for the emails to fetch
+     * @return all of the emails for a particular environment stored in this
      *         instance.
      * @throws ClaptrapException if the emails could not be fetched or parsed.
      */
     @Override
-    public Collection<Email> fetchAllForServer(final String serverName) throws ClaptrapException {
-        return emailStorageService.retreive((new SqlPredicate("serverName == ".concat(serverName))));
+    public Collection<Email> fetchAllForEnvironment(final String environment) throws ClaptrapException {
+        return emailStorageService.retreive((new SqlPredicate("environment == ".concat(environment))));
     }
 
     /**

@@ -7,12 +7,16 @@
 	<parent>
 		<groupId>io.kowalski</groupId>
 		<artifactId>claptrap</artifactId>
-		<version>2.2.1</version>
+		<version>2.4.0</version>
 	</parent>
 
 	<groupId>io.kowalski.claptrap</groupId>
 	<artifactId>claptrap-core</artifactId>
 	<name>claptrap-core</name>
+	
+	<properties>
+	   <subethasmtp.version>3.1.7</subethasmtp.version>
+	</properties>
 
 	<dependencies>
 
@@ -37,7 +41,7 @@
 		<dependency>
 			<groupId>org.subethamail</groupId>
 			<artifactId>subethasmtp</artifactId>
-			<version>3.1.7</version>
+			<version>${subethasmtp.version}</version>
 		</dependency>
 
 	</dependencies>

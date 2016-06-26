@@ -10,7 +10,7 @@
 
 	<groupId>io.kowalski</groupId>
 	<artifactId>claptrap</artifactId>
-	<version>2.3.2</version>
+	<version>2.4.0</version>
 	<packaging>pom</packaging>
 
 	<name>claptrap</name>
@@ -20,9 +20,11 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<jersey.version>2.21</jersey.version>
-		<hazelcast.version>3.6.1</hazelcast.version>
-		<jackson.version>2.7.3</jackson.version>
+		<jersey.version>2.23.1</jersey.version>
+		<hazelcast.version>3.6.3</hazelcast.version>
+		<jackson.version>2.7.5</jackson.version>
+		<guice.version>4.1.0</guice.version>
+		<junit.version>4.12</junit.version>
 	</properties>
 
 	<dependencies>
@@ -30,13 +32,13 @@
 		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
-			<version>4.0</version>
+			<version>${guice.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 
