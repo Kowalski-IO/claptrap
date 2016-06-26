@@ -5,67 +5,55 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Claptrap 2.0</title>
+  <title>Claptrap</title>
 
   <link rel="icon" href="favicon.png">
-  <link href="css/bootstrap.min.css" rel="stylesheet">
-  <link href="css/bootstrap-switch.min.css" rel="stylesheet">
+  <link href="css/bootstrap.css" rel="stylesheet">
   <link href="css/claptrap.css" rel="stylesheet">
 
 </head>
 <body>
 
   <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
+    <div class="container-fluid">
       <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="./">Claptrap 2.0<sub>β</sub></a>
+        <a class="navbar-brand" href="./"><img class="claptrap-logo" src="img/claptrap.svg"></a>
       </div>
       <div id="navbar" class="navbar-collapse collapse">
-
-        <server-selector></server-selector>
-        
-        <ul class="nav navbar-nav navbar-right">
-          <mode-switcher></mode-switcher>
-          <li><a onclick="refreshComponents()"><span class="glyphicon glyphicon-refresh" title="Refresh Servers &amp; Emails"></span></a></li>
-          <li><a onclick="emailTableRef.deleteAllEmails()"><span class="glyphicon glyphicon-trash" title="Delete All Emails for Selected Server"></span></a></li>
-          <li><a href="./"><span class="glyphicon glyphicon-question-sign" title="Help"></span></a></li>
-        </ul>
+        <environment-selector></environment-selector>
+        <mode-selector></mode-selector>
+        <action-bar></action-bar>
       </div>
     </div>
   </nav>
   
-  
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-10 col-md-offset-1">
-        <email-table></email-table>
+      <div class="col-sm-12">
+        <data-viewer></data-viewer>
       </div>
     </div>
   </div>
 
-  <email-viewer></email-viewer>
-    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
-    <script type="text/javascript" src="js/riot+compiler.min.js"></script>
-    <script type="text/javascript" src="js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/bootstrap-switch.min.js"></script>
+	<email-viewer></email-viewer>
+	<log-viewer></log-viewer>
+	<script src="js/jquery-2.1.4.min.js"></script>
+    <script src="js/riot+compiler.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/linkify.min.js"></script>
+    <script src="js/linkify-string.min.js"></script>
     
-    <script type="riot/tag" src="tags/server-selector.tag"></script>
-    <script type="riot/tag" src="tags/mode-switcher.tag"></script>
+    <script type="riot/tag" src="tags/environment-selector.tag"></script>
+    <script type="riot/tag" src="tags/action-bar.tag"></script>
+    <script type="riot/tag" src="tags/mode-selector.tag"></script>
+    <script type="riot/tag" src="tags/data-viewer.tag"></script>
     <script type="riot/tag" src="tags/email-table.tag"></script>
+    <script type="riot/tag" src="tags/log-table.tag"></script>
     <script type="riot/tag" src="tags/email-viewer.tag"></script>
+    <script type="riot/tag" src="tags/log-viewer.tag"></script>
     <script type="riot/tag" src="tags/raw-tag.tag"></script>
     
     <script src="js/claptrap.js"></script>
     
-    <script>
-    
-    </script>
-
   </body>
   </html>

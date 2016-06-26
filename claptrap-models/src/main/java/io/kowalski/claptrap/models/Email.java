@@ -20,7 +20,8 @@ public class Email implements Comparable<Email>, Serializable {
     private final UUID id;
 
     @Indexable
-    private String serverName;
+    private String environment;
+
     private String sender;
 
     @Indexable
@@ -46,12 +47,12 @@ public class Email implements Comparable<Email>, Serializable {
         return id;
     }
 
-    public final String getServerName() {
-        return serverName;
+    public final String getEnvironment() {
+        return environment;
     }
 
-    public final void setServerName(final String serverName) {
-        this.serverName = serverName;
+    public final void setEnvironment(final String environment) {
+        this.environment = environment;
     }
 
     public final String getSender() {

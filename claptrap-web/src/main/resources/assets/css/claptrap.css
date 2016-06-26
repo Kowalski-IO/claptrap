@@ -1,69 +1,37 @@
 body {
-  padding-top: 90px;
-}
-
-footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-  height: 60px;
-  background-color: #fff;
-}
-
-.email-table-message {
-	text-align: center;
-}
-
-.claptrap-logo {
-	padding-top: 50px;
-	display: block;
-	margin: auto;
-	height: 400px;
-}
-
-.modeSwitcherContainer {
-	margin-top: 18px !important;
-	display: inline;
-	float: left;
-}
-
-td.center {
-	text-align: center;
+	padding-top: 80px;
 }
 
 .modal-dialog {
 	margin: 75px auto !important;
 }
 
-.modal .close {
-	color: #18bc9c;
-}
-
-.navbar-default .navbar-brand  {
-	color: #18bc9c;
-}
-
-.navbar-default .navbar-text {
-	color: #fff;
-}
-
 .dropdown-menu .btn-link {
-	color: #2c3e50;
+	color: #000;
 }
 
-.glyphicon.danger {
+.action-icon {
+	width: 18px;
+	height: 18px;
+}
+
+.claptrap-logo {
+	height: 45px;
+	margin-top: -11px;
+}
+
+.table-message {
+	text-align: center;
+}
+
+.action {
+	cursor: pointer;
+}
+
+.linkified {
 	color: #e74c3c;
 }
 
-.glyphicon.info {
-	color: #3498db;
-}
-
-.glyphicon.primary {
-	color: #2c3e50;
-}
-
-.glyphicon.warning {
-	color: #f39c12;
+.linkified:hover {
+	color: #2980B9;
 }

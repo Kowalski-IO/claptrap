@@ -7,12 +7,12 @@
 	<parent>
 		<groupId>io.kowalski</groupId>
 		<artifactId>claptrap</artifactId>
-		<version>2.2.1</version>
+		<version>2.4.0</version>
 	</parent>
 
 	<groupId>io.kowalski.claptrap.api</groupId>
 	<artifactId>claptrap-api-embedded</artifactId>
-	<name>claptrap-embedded</name>
+	<name>claptrap-api-embedded</name>
 
 	<dependencies>
 
@@ -56,20 +56,6 @@
 				</executions>
 			</plugin>
 		</plugins>
-		<extensions>
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ssh</artifactId>
-				<version>2.10</version>
-			</extension>
-		</extensions>
 	</build>
-
-	<distributionManagement>
-		<repository>
-			<id>kowalski</id>
-			<url>scp://maven-ssh.kowalski.io/root/www/releases</url>
-		</repository>
-	</distributionManagement>
 
 </project>

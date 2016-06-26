@@ -3,9 +3,9 @@
 
   <script>
   var self = this;
-  this.root.innerHTML;
+  self.root.innerHTML;
   
-  this.on('update', function() {
+  self.on('update', function() {
 	  self.root.innerHTML = opts.content;
   });
   

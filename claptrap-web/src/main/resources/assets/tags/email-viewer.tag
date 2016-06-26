@@ -4,8 +4,8 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">{ email.subject }</h4>
+        <h4 class="modal-title pull-left">{ email.subject }</h4>
+        <img class="action pull-right" data-dismiss="modal" src="img/close.svg">
       </div>
       <div class="modal-body">
         <table class="table table-condensed">  
@@ -25,33 +25,32 @@
             </tbody>
         </table>
       
-      <hr>
-      
-      <div id="email-body" if = { email.htmlEmail }>
-      
-        <div>
-
-          <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="#html" aria-controls="html" role="tab" data-toggle="tab">HTML Email</a></li>
-            <li role="presentation"><a href="#plain" aria-controls="plain" role="tab" data-toggle="tab">Plain Email</a></li>
-          </ul>
+          <hr>
           
-          <br>
-
-          <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="html"><raw-tag content={ email.htmlBody }/></div>
-            <div role="tabpanel" class="tab-pane" id="plain">{ email.plainBody }</div>
-          </div>
-
-        </div>
-
-      </div>
-      
-      <div id="email-body" if = { !email.htmlEmail }>
+          <div id="email-body" if = { email.htmlEmail }>
+    
+          <div>
         
-        {email.plainBody}
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active"><a href="#html" aria-controls="html" role="tab" data-toggle="tab">HTML Email</a></li>
+              <li role="presentation"><a href="#plain" aria-controls="plain" role="tab" data-toggle="tab">Plain Email</a></li>
+            </ul>
+        
+            <br>
+        
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active" id="html"><raw-tag content={ email.htmlBody }/></div>
+              <div role="tabpanel" class="tab-pane" id="plain">{ email.plainBody }</div>
+            </div>
+        
+          </div>
+        
+        </div>
+        
+        <div id="email-body" if = { !email.htmlEmail }>
+          <raw-tag content={ email.plainBody }/>
+        </div>
       
-      </div>
 
       </div>
     </div>
@@ -61,13 +60,13 @@
 
     <script>
         var self = this;
-        var email;
+        self.email = undefined;
         
-        showEmail(emailToView) {
-            self.email = emailToView;
+        this.observable.on('expandEmail', function(emailToExpand) {
+            self.email = emailToExpand;
             self.update();
             $('#emailViewer').modal('show');
-        }
+        });
         
     </script>
 

@@ -1,4 +1,4 @@
-package io.kowalski.claptrap.storage.email;
+package io.kowalski.claptrap.storage.logs;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,35 +12,33 @@ import org.glassfish.jersey.media.sse.EventOutput;
 import org.glassfish.jersey.media.sse.OutboundEvent;
 import org.glassfish.jersey.media.sse.SseBroadcaster;
 
-import io.kowalski.claptrap.models.Email;
+import io.kowalski.claptrap.models.Log;
 import io.kowalski.claptrap.storage.BroadcastService;
 
-public class EmailBroadcastService implements BroadcastService<Email, String> {
+public class LogBroadcastService implements BroadcastService<Log, String> {
 
     private final ConcurrentHashMap<String, SseBroadcaster> broadcasterMap;
 
     @Inject
-    public EmailBroadcastService(@Named("emailBroadcastMap") final ConcurrentHashMap<String, SseBroadcaster> broadcasterMap) {
+    public LogBroadcastService(@Named("logBroadcastMap") final ConcurrentHashMap<String, SseBroadcaster> broadcasterMap) {
         this.broadcasterMap = broadcasterMap;
     }
 
     @Override
-    public void broadcast(final Email email) {
-        final SseBroadcaster broadcaster = fetchBroadcaster(email.getEnvironment());
+    public void broadcast(final Log log) {
+        final SseBroadcaster broadcaster = fetchBroadcaster(log.getEnvironment());
 
         final OutboundEvent.Builder eventBuilder = new OutboundEvent.Builder();
-        final OutboundEvent event = eventBuilder.name("message")
-                .mediaType(MediaType.APPLICATION_JSON_TYPE)
-                .data(Email.class, email)
-                .build();
+        final OutboundEvent event = eventBuilder.name("message").mediaType(MediaType.APPLICATION_JSON_TYPE)
+                .data(Log.class, log).build();
 
         broadcaster.broadcast(event);
     }
 
     @Override
-    public void broadcast(final List<Email> emails) {
-        for (final Email email : emails) {
-            broadcast(email);
+    public void broadcast(final List<Log> logs) {
+        for (final Log log : logs) {
+            broadcast(log);
         }
     }
 

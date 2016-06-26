@@ -81,19 +81,19 @@ public class ExternalMailbox implements Mailbox {
     }
 
     /**
-     * Fetch all of the emails for a particular server stored by the targeted
-     * Claptrap instance.
+     * Fetch all of the emails for a particular environment stored by the
+     * targeted Claptrap instance.
      *
-     * @param serverName for the emails to fetch
-     * @return all of the emails for a particular server stored in this
+     * @param environmentName for the emails to fetch
+     * @return all of the emails for a particular environment stored in this
      *         instance.
      * @throws ClaptrapException if the emails could not be fetched or parsed.
      */
     @Override
-    public Collection<Email> fetchAllForServer(final String serverName) throws ClaptrapException {
+    public Collection<Email> fetchAllForEnvironment(final String environment) throws ClaptrapException {
         try {
             final List<Email> result = new ArrayList<Email>();
-            final Request request = new Request.Builder().url(instanceURL.concat("/api/emails/").concat(serverName))
+            final Request request = new Request.Builder().url(instanceURL.concat("/api/emails/").concat(environment))
                     .build();
             final Response response = okhttp.newCall(request).execute();
             final List<Email> parsedEmails = mapper.readValue(response.body().string(),

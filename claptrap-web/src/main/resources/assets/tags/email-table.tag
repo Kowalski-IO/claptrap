@@ -1,16 +1,10 @@
 <email-table>
 
-    <div if ={ serverSelectorRef.serverSelected === false }>
-        <h2 class="email-table-message">Please pick a server from the selector above.</h2>
-        <object type="image/svg+xml" class="claptrap-logo" data="img/claptrap.svg">Your browser does not support SVG</object>
-    </div>
-
-    <div if ={ serverSelectorRef.serverSelected === true && emails.length === 0 }>
-        <h2 class="email-table-message">No emails caught for selected server.</h2>
-        <object type="image/svg+xml" class="claptrap-logo" data="img/claptrap.svg">Your browser does not support SVG</object>
+    <div if ={ emails.length === 0 }>
+        <h2 class="table-message">No emails captured for selected environment.</h2>
     </div>
     
-    <div if = { serverSelectorRef.serverSelected === true && emails.length > 0 } class="table-responsive">
+    <div id="emailTable" if = { emails.length > 0 } class="table-responsive">
 	    <table class="table table-striped table-bordered table-hover table-condensed">  
 	        <thead>
 	            <tr> 
@@ -22,16 +16,15 @@
 	                <th>Actions</th>
 	            </tr> 
 	        </thead>
-	        <tbody> 
-	            <tr each = { emails }> 
-	                <td class="col-md-2">{ received }</td>
+	        <tbody class="list"><tr each = { emails } no-reorder> 
+	                <td class="col-md-2 received">{ received }</td>
 	                <td class="col-md-1">{ sender }</td>
 	                <td class="col-md-3">{ recipient }</td>
 	                <td class="col-md-2">{ subject }</td>
-	                <td class="col-md-4">{ plainBody }</td>
-	                <td class="col-md-1">
-	                    <a onclick="{ parent.expand }"><span class="glyphicon glyphicon-new-window info" title="Read"></span></a>&nbsp;
-	                    <a onclick="{ parent.delete }"><span class="glyphicon glyphicon-trash danger" title="Delete"></span></a>
+	                <td class="col-md-4"><raw-tag content={ plainBody }/></td>
+	                <td class="col-md-1 text-center">
+	                    <a onclick="{ parent.expandEmail }"><img class="action-icon" src="img/open.svg" title="read" /></span></a>
+	                    <a onclick="{ parent.deleteEmail }"><img class="action-icon" src="img/delete.svg" title="delete" /></span></a>
 	               </td>
 	            </tr>
 	        </tbody>
@@ -41,65 +34,86 @@
     <script>
     
         var self = this;
-        var emails = [];
-        var watchEventSource;
         
-        this.on('mount', function() {
+        self.selectedEnvironment = undefined;
+        
+        self.emails = [];
+        self.watchEventSource;
+        
+        expandEmail(event) {
+            self.observable.trigger('expandEmail', event.item);
+        }
+        
+        changeEnvironment(environment) {
+            self.selectedEnvironment = environment;
             self.refresh();
-          });
-        
-        serverChange() {
-        	self.refresh();
-        	self.watch();
+            self.watch();
         }
         
-        expand(event) {
-        	emailViewerRef.showEmail(event.item);
-        }
-        
-        delete(event) {
+        deleteEmail(event) {
         	var email = event.item;
         	self.ajaxDeleteEmail(email.id);
         	var index = self.emails.indexOf(email)
         	self.emails.splice(index, 1)
         }
-  
+        
+        linkify(emailToLinkify) {
+            if (emailToLinkify.plainBody !== undefined) {
+                emailToLinkify.plainBody = emailToLinkify.plainBody.linkify({target: "_blank"});
+             }
+             return emailToLinkify;
+        }
+        
+        linkifyAll(emailsToLinkify) {
+            if (emailsToLinkify !== undefined) {
+                for (i = 0; i < emailsToLinkify.length; i++) {
+                    emailsToLinkify[i] = self.linkify(emailsToLinkify[i]);
+                }
+            }
+            return emailsToLinkify;
+        }
+        
+        
         refresh() {
-            var serverName = serverSelectorRef.getSelectedServer();
-           $.get('./api/emails/' + serverName, function(data) {
-                self.emails = data;
+            if (self.selectedEnvironment == undefined) {
+                return;
+            }
+            
+           $.get('./api/emails/' + self.selectedEnvironment, function(data) {
+                self.emails = self.linkifyAll(data);
                 self.update();
             });
+            
         }
         
         watch() {
-        	var serverName = serverSelectorRef.getSelectedServer();
-        	if (serverName === undefined || autoRefresh === false) {
+        	if (self.selectedEnvironment === undefined || autoRefresh === false) {
         		return;
         	} else if (self.watchEventSource !== undefined) {
         		self.watchEventSource.close();
         	}
-        	self.watchEventSource = new EventSource('./api/emails/broadcast/' + serverName);
+        	self.watchEventSource = new EventSource('./api/emails/broadcast/' + self.selectedEnvironment);
         	self.watchEventSource.onmessage = function(message) {
-        		   var newEmail = message.data;
-        		   self.emails.unshift(JSON.parse(newEmail));
-        		   self.update();
+    		   var newEmail = self.linkify(JSON.parse(message.data));
+    		   self.emails.unshift(newEmail);
+    		   self.update();
         	}
         }
         
         deleteAllEmails() {
-        	 var serverName = serverSelectorRef.getSelectedServer();
-             var deleteUrl = './api/emails/' + serverName;
+             var deleteUrl = './api/emails/' + self.selectedEnvironment;
              $.ajax({
                 url: deleteUrl,
                 type: 'DELETE',
-                complete: function(data) { self.refresh(); }
+                complete: function(data) {
+                    self.emails = []; 
+                    self.refresh();
+                }
             });
         }
         
         ajaxDeleteEmail(emailToDelete) {
-        	 var serverName = serverSelectorRef.getSelectedServer();
-        	 var deleteUrl = './api/emails/' + serverName + '/' + emailToDelete;
+        	 var deleteUrl = './api/emails/' + self.selectedEnvironment + '/' + emailToDelete;
         	 $.ajax({
        		    url: deleteUrl,
        		    type: 'DELETE'
