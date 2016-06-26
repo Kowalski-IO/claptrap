@@ -18,10 +18,10 @@
 	        </thead>
 	        <tbody class="list"><tr each = { emails } no-reorder> 
 	                <td class="col-md-2 received">{ received }</td>
-	                <td class="col-md-1 sender">{ sender }</td>
-	                <td class="col-md-3 recipient">{ recipient }</td>
-	                <td class="col-md-2 subject">{ subject }</td>
-	                <td class="col-md-4 plainBody">{ plainBody }</td>
+	                <td class="col-md-1">{ sender }</td>
+	                <td class="col-md-3">{ recipient }</td>
+	                <td class="col-md-2">{ subject }</td>
+	                <td class="col-md-4"><raw-tag content={ plainBody }/></td>
 	                <td class="col-md-1 text-center">
 	                    <a onclick="{ parent.expandEmail }"><img class="action-icon" src="img/open.svg" title="read" /></span></a>
 	                    <a onclick="{ parent.deleteEmail }"><img class="action-icon" src="img/delete.svg" title="delete" /></span></a>
@@ -57,15 +57,33 @@
         	self.emails.splice(index, 1)
         }
         
+        linkify(emailToLinkify) {
+            if (emailToLinkify.plainBody !== undefined) {
+                emailToLinkify.plainBody = emailToLinkify.plainBody.linkify({target: "_blank"});
+             }
+             return emailToLinkify;
+        }
+        
+        linkifyAll(emailsToLinkify) {
+            if (emailsToLinkify !== undefined) {
+                for (i = 0; i < emailsToLinkify.length; i++) {
+                    emailsToLinkify[i] = self.linkify(emailsToLinkify[i]);
+                }
+            }
+            return emailsToLinkify;
+        }
+        
+        
         refresh() {
             if (self.selectedEnvironment == undefined) {
                 return;
             }
             
            $.get('./api/emails/' + self.selectedEnvironment, function(data) {
-                self.emails = data;
+                self.emails = self.linkifyAll(data);
                 self.update();
             });
+            
         }
         
         watch() {
@@ -76,8 +94,8 @@
         	}
         	self.watchEventSource = new EventSource('./api/emails/broadcast/' + self.selectedEnvironment);
         	self.watchEventSource.onmessage = function(message) {
-    		   var newEmail = message.data;
-    		   self.emails.unshift(JSON.parse(newEmail));
+    		   var newEmail = self.linkify(JSON.parse(message.data));
+    		   self.emails.unshift(newEmail);
     		   self.update();
         	}
         }

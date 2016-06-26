@@ -95,7 +95,7 @@ public class ExternalMailboxTest {
         email.setFrom("allEmails@claptrap.kowalski.io", "Claptrap");
         email.setSubject("Test simple email");
 
-        email.setMsg("This is a simple email test to see if Claptrap actually works!");
+        email.setMsg("This is a simple email test to see if Claptrap actually works! Here is a link to see if linkify is working: https://kowalski.io");
 
         email.send();
 

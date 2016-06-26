@@ -25,33 +25,32 @@
             </tbody>
         </table>
       
-      <hr>
-      
-      <div id="email-body" if = { email.htmlEmail }>
-      
-        <div>
-
-          <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="#html" aria-controls="html" role="tab" data-toggle="tab">HTML Email</a></li>
-            <li role="presentation"><a href="#plain" aria-controls="plain" role="tab" data-toggle="tab">Plain Email</a></li>
-          </ul>
+          <hr>
           
-          <br>
-
-          <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="html"><raw-tag content={ email.htmlBody }/></div>
-            <div role="tabpanel" class="tab-pane" id="plain">{ email.plainBody }</div>
-          </div>
-
-        </div>
-
-      </div>
-      
-      <div id="email-body" if = { !email.htmlEmail }>
+          <div id="email-body" if = { email.htmlEmail }>
+    
+          <div>
         
-        {email.plainBody}
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active"><a href="#html" aria-controls="html" role="tab" data-toggle="tab">HTML Email</a></li>
+              <li role="presentation"><a href="#plain" aria-controls="plain" role="tab" data-toggle="tab">Plain Email</a></li>
+            </ul>
+        
+            <br>
+        
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active" id="html"><raw-tag content={ email.htmlBody }/></div>
+              <div role="tabpanel" class="tab-pane" id="plain">{ email.plainBody }</div>
+            </div>
+        
+          </div>
+        
+        </div>
+        
+        <div id="email-body" if = { !email.htmlEmail }>
+          <raw-tag content={ email.plainBody }/>
+        </div>
       
-      </div>
 
       </div>
     </div>

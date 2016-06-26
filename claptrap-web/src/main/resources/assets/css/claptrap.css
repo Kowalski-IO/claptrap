@@ -27,3 +27,11 @@ body {
 .action {
 	cursor: pointer;
 }
+
+.linkified {
+	color: #e74c3c;
+}
+
+.linkified:hover {
+	color: #2980B9;
+}
