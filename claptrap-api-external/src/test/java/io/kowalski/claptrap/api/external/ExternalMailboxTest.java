@@ -11,7 +11,6 @@ import java.util.Set;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
@@ -27,7 +26,6 @@ import io.kowalski.claptrap.models.Email;
  * @since 2.2.0
  */
 
-@Ignore
 public class ExternalMailboxTest {
 
     private static ExternalMailbox mailbox;
@@ -49,7 +47,7 @@ public class ExternalMailboxTest {
 
         assertEquals("sendSimpleEmail sends 3 emails total", 3, fetchedEmails.size());
 
-        final Set<String> emailAddresses = new HashSet<String>();
+        final Set<String> emailAddresses = new HashSet<>();
         for (final Email email : fetchedEmails) {
             emailAddresses.add(email.getRecipient());
         }

@@ -57,33 +57,15 @@
         	self.emails.splice(index, 1)
         }
         
-        linkify(emailToLinkify) {
-            if (emailToLinkify.plainBody !== undefined) {
-                emailToLinkify.plainBody = emailToLinkify.plainBody.linkify({target: "_blank"});
-             }
-             return emailToLinkify;
-        }
-        
-        linkifyAll(emailsToLinkify) {
-            if (emailsToLinkify !== undefined) {
-                for (i = 0; i < emailsToLinkify.length; i++) {
-                    emailsToLinkify[i] = self.linkify(emailsToLinkify[i]);
-                }
-            }
-            return emailsToLinkify;
-        }
-        
-        
         refresh() {
             if (self.selectedEnvironment == undefined) {
                 return;
             }
             
            $.get('./api/emails/' + self.selectedEnvironment, function(data) {
-                self.emails = self.linkifyAll(data);
+                self.emails = data;
                 self.update();
             });
-            
         }
         
         watch() {
@@ -94,8 +76,7 @@
         	}
         	self.watchEventSource = new EventSource('./api/emails/broadcast/' + self.selectedEnvironment);
         	self.watchEventSource.onmessage = function(message) {
-    		   var newEmail = self.linkify(JSON.parse(message.data));
-    		   self.emails.unshift(newEmail);
+    		   self.emails.unshift(JSON.parse(message.data));
     		   self.update();
         	}
         }
