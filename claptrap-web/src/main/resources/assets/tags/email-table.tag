@@ -23,7 +23,8 @@
 	                <td class="col-md-2">{ subject }</td>
 	                <td class="col-md-4"><raw-tag content={ plainBody }/></td>
 	                <td class="col-md-1 text-center">
-	                    <a onclick="{ parent.expandEmail }"><img class="action-icon" src="img/open.svg" title="read" /></span></a>
+	                    <a if = { htmlEmail} href= { 'email_frame.html?env=' + environment + '&email=' + id } target="_new"><img class="action-icon" src="img/open.svg" title="read" /></a>
+	                    <a if = { !htmlEmail } onclick="{ parent.expandEmail }"><img class="action-icon" src="img/open.svg" title="read" /></span></a>
 	                    <a onclick="{ parent.deleteEmail }"><img class="action-icon" src="img/delete.svg" title="delete" /></span></a>
 	               </td>
 	            </tr>
