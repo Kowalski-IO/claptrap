@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration>
+	<jdbc>
+		<driver>org.h2.Driver</driver>
+		<url>jdbc:h2:tcp://localhost:32769/default</url>
+	</jdbc>
+	<generator>
+		<database>
+			<name>org.jooq.util.h2.H2Database</name>
+			<includes>.*</includes>
+			<schemata>
+				<schema>
+					<inputSchema>CLAPTRAP</inputSchema>
+				</schema>
+			</schemata>
+		</database>
+		<target>
+			<packageName>io.kowalski.claptrap.models.jooq</packageName>
+			<directory>target/generated-sources</directory>
+		</target>
+		<generate>
+			<pojos>true</pojos>
+			<daos>true</daos>
+			<validationAnnotations>true</validationAnnotations>
+			<fluentSetters>true</fluentSetters>
+			<javaTimeTypes>true</javaTimeTypes>
+		</generate>
+	</generator>
+</configuration>

@@ -1,0 +1,26 @@
+server:
+  registerDefaultExceptionMappers: false
+  rootPath: /api
+  applicationConnectors:
+    - type: http
+      port: 8585
+  gzip:
+    enabled: false
+  adminConnectors: []
+
+logging:
+  level: INFO
+  appenders:
+    - type: console
+      threshold: ALL
+      timeZone: UTC
+      target: stdout
+      logFormat: "%-5.5p %d{yyyy-MM-dd HH:mm:ss.SSS} [%40.40c{5}] - %m%n"
+    - type: file
+      currentLogFilename: claptrap.log
+      threshold: ALL
+      archive: true
+      archivedLogFilenamePattern: claptrap-%d.log
+      archivedFileCount: 10
+      timeZone: UTC
+      logFormat: "%-5.5p %d{yyyy-MM-dd HH:mm:ss.SSS} [%40.40c{5}] - %m%n"
