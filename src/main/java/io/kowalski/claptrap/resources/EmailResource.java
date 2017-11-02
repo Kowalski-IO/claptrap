@@ -1,68 +1,45 @@
 package io.kowalski.claptrap.resources;
 
 import io.kowalski.claptrap.models.Email;
-import io.kowalski.claptrap.services.EmailStorage;
+import io.kowalski.claptrap.models.PredicateMode;
+import io.kowalski.claptrap.services.StorageService;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Path("/emails")
 @Produces(MediaType.APPLICATION_JSON)
 public class EmailResource {
 
     @Inject
-    private EmailStorage emailStorage;
+    private StorageService storageService;
 
     @GET
-    public Collection<Email> allEmails() {
-        List<Email> emails = emailStorage.retrieveAll();
+    public Collection<Email> emails(@QueryParam("environment") List<String> environment,
+                                    @QueryParam("to") List<String> to, @QueryParam("cc") List<String> cc, @QueryParam("bcc") List<String> bcc,
+                                    @QueryParam("from") List<String> from, @QueryParam("sender") List<String> sender, @QueryParam("reply_to") List<String> replyTo,
+                                    @QueryParam("subject") List<String> subject, @QueryParam("body") List<String> body,
+                                    @QueryParam("mode") PredicateMode mode) {
+        List<Email> emails = storageService.retrieveForCriteria(environment, to, cc, bcc, from,
+                sender, replyTo, subject, body, mode);
         Collections.sort(emails);
         return emails;
     }
-//
-//    @GET
-//    @Path("/{environment}")
-//    public Collection<Email> allEmailsForEnvironment(@PathParam("environment") final String environment) {
-//        final Collection<Email> emails = emailStorage.retreive(new SqlPredicate("environment == ".concat(environment)));
-//        Collections.sort(emails);
-//        return emails;
-//    }
-//
-//    @GET
-//    @Path("/{environment}/{emailID}")
-//    public Email singleEmailFromEnvironment(@PathParam("environment") final String environment, @PathParam("emailID") final UUID emailID) {
-//        final String predicateString = "environment == ".concat(environment).concat(" AND id = ").concat(emailID.toString());
-//        final List<Email> emails = Lists.newArrayList(storage.retreive(new SqlPredicate(predicateString)));
-//        return emails.size() > 0 ? emails.get(0) : null;
-//    }
-//
-//    @DELETE
-//    @Path("/{environment}")
-//    public void deleteEmailFromEnvironment(@PathParam("environment") final String environment) {
-//        final String predicateString = "environment == ".concat(environment);
-//        final List<Email> emails = Lists.newArrayList(storage.retreive(new SqlPredicate(predicateString)));
-//        emailService.remove(emails);
-//    }
-//
-//    @DELETE
-//    @Path("/{environment}/{emailID}")
-//    public Email deleteEmailFromEnvironment(@PathParam("environment") final String environment, @PathParam("emailID") final UUID emailID) {
-//        final String predicateString = "environment == ".concat(environment).concat(" AND id = ").concat(emailID.toString());
-//        final List<Email> emails = Lists.newArrayList(storage.retreive(new SqlPredicate(predicateString)));
-//
-//        final Email email = emails.size() > 0 ? emails.get(0) : null;
-//
-//        if (email != null) {
-//            storage.remove(email);
-//        }
-//
-//        return email;
-//    }
+
+    @DELETE
+    public void deleteAllEmails() {
+        storageService.deleteAllEmails();
+    }
+
+    @DELETE
+    @Path("{id}")
+    public void deleteEmail(@PathParam("id") UUID id) {
+        storageService.deleteEmail(id);
+    }
 
 }

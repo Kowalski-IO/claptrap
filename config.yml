@@ -8,6 +8,8 @@ server:
     enabled: false
   adminConnectors: []
 
+smtpPort: 2525
+
 logging:
   level: INFO
   appenders:

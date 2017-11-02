@@ -21,7 +21,7 @@ public class Header implements Serializable {
 
     private String messageID;
 
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd hh:mm:ss a")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime date;
 
     private Contact from;
@@ -53,6 +53,11 @@ public class Header implements Serializable {
         allContacts.addAll(cc);
         allContacts.addAll(bcc);
         return allContacts;
+    }
+
+    public void setSender(Contact sender) {
+        sender.setType(ContactType.SENDER);
+        this.sender = sender;
     }
 
 }

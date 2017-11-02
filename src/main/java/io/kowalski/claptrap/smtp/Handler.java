@@ -1,8 +1,7 @@
 package io.kowalski.claptrap.smtp;
 
 import io.kowalski.claptrap.models.*;
-import io.kowalski.claptrap.services.ContactStorage;
-import io.kowalski.claptrap.services.EmailStorage;
+import io.kowalski.claptrap.services.StorageService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.mail.util.MimeMessageParser;
 import org.subethamail.smtp.MessageHandler;
@@ -24,16 +23,14 @@ import java.util.stream.Collectors;
 @Slf4j
 public class Handler implements MessageHandler {
 
-    private final ContactStorage contactStorage;
-    private final EmailStorage emailStorage;
+    private final StorageService storageService;
     private final Map<String, Contact> recipients;
 
     private MimeMessage mimeMessage;
     private String from;
 
-    Handler(ContactStorage contactStorage, EmailStorage emailStorage) {
-        this.contactStorage = contactStorage;
-        this.emailStorage = emailStorage;
+    Handler(StorageService storageService) {
+        this.storageService = storageService;
         recipients = new HashMap<>();
     }
 
@@ -62,8 +59,7 @@ public class Handler implements MessageHandler {
             try {
                 Email email = parseEmail();
                 if (email != null) {
-                    // contactStorage.store(email.getHeader().getAllRecipients());
-                    emailStorage.store(email);
+                    storageService.storeEmail(email);
                 }
             } catch (Exception e) {
                 log.error("Unable to parse email.", e);

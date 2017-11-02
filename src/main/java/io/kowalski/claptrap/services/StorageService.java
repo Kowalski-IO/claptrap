@@ -1,6 +1,7 @@
 package io.kowalski.claptrap.services;
 
 import io.kowalski.claptrap.models.*;
+import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Query;
 
@@ -11,12 +12,12 @@ import java.util.stream.Collectors;
 
 import static io.kowalski.claptrap.models.jooq.Tables.*;
 
-public class EmailStorage {
+public class StorageService {
 
     @Inject
     private DSLContext dsl;
 
-    public void store(Email email) {
+    public void storeEmail(Email email) {
         dsl.transaction(tr -> {
             tr.dsl().insertInto(EMAIL)
                     .set(EMAIL.ID, email.getId())
@@ -53,10 +54,10 @@ public class EmailStorage {
             List<Query> attachmentInserts = email.getBody().getAttachments()
                     .parallelStream()
                     .map(a -> tr.dsl().insertInto(ATTACHMENT)
-                    .set(ATTACHMENT.ID, UUID.randomUUID())
-                    .set(ATTACHMENT.EMAIL_ID, email.getId())
-                    .set(ATTACHMENT.FILENAME, a.getFilename())
-                    .set(ATTACHMENT.CONTENT_TYPE, a.getContentType()))
+                            .set(ATTACHMENT.ID, UUID.randomUUID())
+                            .set(ATTACHMENT.EMAIL_ID, email.getId())
+                            .set(ATTACHMENT.FILENAME, a.getFilename())
+                            .set(ATTACHMENT.CONTENT_TYPE, a.getContentType()))
                     .collect(Collectors.toList());
 
             tr.dsl().batch(contactInserts).execute();
@@ -65,11 +66,63 @@ public class EmailStorage {
         });
     }
 
-    public List<Email> retrieveAll() {
+    public void deleteEmail(UUID id) {
+        dsl.delete(EMAIL)
+                .where(EMAIL.ID.eq(id))
+                .execute();
+    }
+
+    public void deleteAllEmails() {
+        dsl.delete(EMAIL).execute();
+    }
+
+    public List<Contact> allContacts() {
+        return dsl.selectDistinct(CONTACT.EMAIL)
+                .select(CONTACT.PERSONAL)
+                .from(CONTACT)
+                .orderBy(CONTACT.EMAIL.asc())
+                .fetchStream()
+                .map(r -> {
+                    Contact temp = new Contact();
+                    temp.setEmail(r.get(CONTACT.EMAIL));
+                    temp.setName(r.get(CONTACT.PERSONAL));
+                    return temp;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public List<String> allEnvironments() {
+        return dsl.selectDistinct(EMAIL.ENVIRONMENT)
+                .from(EMAIL)
+                .orderBy(EMAIL.ENVIRONMENT.asc())
+                .fetch(EMAIL.ENVIRONMENT);
+    }
+
+    public List<Email> retrieveForCriteria(List<String> environment, List<String> to, List<String> cc, List<String> bcc,
+                                           List<String> from, List<String> sender, List<String> replyTo,
+                                           List<String> subject, List<String> body, PredicateMode mode) {
+        if (mode == null) {
+            mode = PredicateMode.OR;
+        }
+
+        Condition condition = null;
+
+        if (!environment.isEmpty()) {
+            condition = EMAIL.ENVIRONMENT.in(environment);
+        }
+
+        condition = contactFilter(condition, to, ContactType.TO, mode);
+        condition = contactFilter(condition, cc, ContactType.CC, mode);
+        condition = contactFilter(condition, bcc, ContactType.BCC, mode);
+        condition = contactFilter(condition, from, ContactType.FROM, mode);
+        condition = contactFilter(condition, sender, ContactType.SENDER, mode);
+        condition = contactFilter(condition, replyTo, ContactType.REPLY_TO, mode);
+
         return dsl.select()
                 .from(EMAIL)
                 .innerJoin(HEADER).on(EMAIL.ID.eq(HEADER.EMAIL_ID))
                 .innerJoin(BODY).on(EMAIL.ID.eq(BODY.EMAIL_ID))
+                .where(condition)
                 .fetchStream()
                 .map(r -> {
                     final Email e = new Email();
@@ -93,6 +146,7 @@ public class EmailStorage {
                     dsl.select()
                             .from(CONTACT)
                             .where(CONTACT.EMAIL_ID.eq(e.getId()))
+                            .orderBy(CONTACT.EMAIL)
                             .fetchStream()
                             .forEach(contactRecord -> {
                                 Contact temp = new Contact();
@@ -138,6 +192,25 @@ public class EmailStorage {
                     return e;
                 })
                 .collect(Collectors.toList());
+    }
+
+    private Condition contactFilter(Condition condition, List<String> contacts, ContactType type, PredicateMode mode) {
+        if (contacts == null || contacts.isEmpty()) {
+            return condition;
+        }
+
+        Condition temp = EMAIL.ID.in(dsl.select(CONTACT.EMAIL_ID)
+                .from(CONTACT)
+                .where(CONTACT.TYPE.eq(type.name()))
+                .and(CONTACT.EMAIL.in(contacts)));
+
+        switch (mode) {
+            case OR:
+            default:
+                return condition != null ? condition.or(temp) : temp;
+            case AND:
+                return condition != null ? condition.and(temp) : temp;
+        }
     }
 
 }
