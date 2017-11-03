@@ -7,6 +7,7 @@ import io.kowalski.claptrap.services.StorageService;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -29,6 +30,20 @@ public class EmailResource {
                 sender, replyTo, subject, body, mode);
         Collections.sort(emails);
         return emails;
+    }
+
+    @GET
+    @Path("{id}/plain")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String bodyPlain(@PathParam("id") UUID id) {
+        return storageService.plainBodyForId(id);
+    }
+
+    @GET
+    @Path("{id}/html")
+    @Produces(MediaType.TEXT_HTML)
+    public String bodyHTML(@PathParam("id") UUID id) {
+        return storageService.htmlBodyForId(id);
     }
 
     @DELETE

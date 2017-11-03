@@ -98,6 +98,22 @@ public class StorageService {
                 .fetch(EMAIL.ENVIRONMENT);
     }
 
+    public String plainBodyForId(UUID id) {
+        return dsl.select(BODY.PLAIN_TEXT)
+                .from(EMAIL)
+                .innerJoin(BODY).on(EMAIL.ID.eq(BODY.EMAIL_ID))
+                .where(EMAIL.ID.eq(id))
+                .fetchOne().value1();
+    }
+
+    public String htmlBodyForId(UUID id) {
+        return dsl.select(BODY.HTML)
+                .from(EMAIL)
+                .innerJoin(BODY).on(EMAIL.ID.eq(BODY.EMAIL_ID))
+                .where(EMAIL.ID.eq(id))
+                .fetchOne().value1();
+    }
+
     public List<Email> retrieveForCriteria(List<String> environment, List<String> to, List<String> cc, List<String> bcc,
                                            List<String> from, List<String> sender, List<String> replyTo,
                                            List<String> subject, List<String> body, PredicateMode mode) {

@@ -11,7 +11,8 @@ public class HikariProvider implements Provider<HikariDataSource> {
     public HikariDataSource get() {
         final HikariConfig config = new HikariConfig();
         config.setPoolName("H2_EMBEDDED");
-        config.setJdbcUrl("jdbc:h2:tcp://localhost:32769/default");
+        //config.setJdbcUrl("jdbc:h2:tcp://localhost:32769/default");
+        config.setJdbcUrl("jdbc:h2:./h2db");
 
         return new HikariDataSource(config);
     }
