@@ -1,17 +1,27 @@
 package io.kowalski.claptrap.services;
 
 import io.kowalski.claptrap.models.*;
+import lombok.extern.slf4j.Slf4j;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Query;
 
 import javax.inject.Inject;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileVisitOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static io.kowalski.claptrap.models.jooq.Tables.*;
 
+@Slf4j
 public class StorageService {
 
     @Inject
@@ -54,7 +64,7 @@ public class StorageService {
             List<Query> attachmentInserts = email.getBody().getAttachments()
                     .parallelStream()
                     .map(a -> tr.dsl().insertInto(ATTACHMENT)
-                            .set(ATTACHMENT.ID, UUID.randomUUID())
+                            .set(ATTACHMENT.ID, a.getId())
                             .set(ATTACHMENT.EMAIL_ID, email.getId())
                             .set(ATTACHMENT.FILENAME, a.getFilename())
                             .set(ATTACHMENT.CONTENT_TYPE, a.getContentType()))
@@ -73,7 +83,16 @@ public class StorageService {
     }
 
     public void deleteAllEmails() {
-        dsl.delete(EMAIL).execute();
+        try {
+            dsl.delete(EMAIL).execute();
+            Path rootPath = Paths.get("attachments");
+            Files.walk(rootPath, FileVisitOption.FOLLOW_LINKS)
+                    .sorted(Comparator.reverseOrder())
+                    .map(Path::toFile)
+                    .forEach(File::delete);
+        } catch (IOException e) {
+           log.error("Unable to delete all attachments while deleting all emails.", e);
+        }
     }
 
     public List<Contact> allContacts() {
@@ -114,31 +133,41 @@ public class StorageService {
                 .fetchOne().value1();
     }
 
-    public List<Email> retrieveForCriteria(List<String> environment, List<String> to, List<String> cc, List<String> bcc,
-                                           List<String> from, List<String> sender, List<String> replyTo,
-                                           List<String> subject, List<String> body, PredicateMode mode) {
-        if (mode == null) {
-            mode = PredicateMode.OR;
-        }
+    public Attachment attachmentForId(UUID email, UUID attachment) {
+        return dsl.select()
+                .from(ATTACHMENT)
+                .where(ATTACHMENT.ID.eq(attachment))
+                .and(ATTACHMENT.EMAIL_ID.eq(email))
+                .fetchOne()
+                .map(r -> r.into(Attachment.class));
+    }
 
+    public File attachmentFileForId(UUID email, UUID attachment) {
+        Path path = Paths.get("attachments/".concat(email.toString()).concat("/").concat(attachment.toString()));
+        return path.toFile();
+    }
+
+    public Collection<Email> retrieveForEnvironment(List<String> environment) {
+        return retrieveForCriteria(environment, null);
+    }
+
+    public Collection<Email> retrieveForCriteria(List<String> environment, Condition filter) {
         Condition condition = null;
 
         if (!environment.isEmpty()) {
             condition = EMAIL.ENVIRONMENT.in(environment);
         }
 
-        condition = contactFilter(condition, to, ContactType.TO, mode);
-        condition = contactFilter(condition, cc, ContactType.CC, mode);
-        condition = contactFilter(condition, bcc, ContactType.BCC, mode);
-        condition = contactFilter(condition, from, ContactType.FROM, mode);
-        condition = contactFilter(condition, sender, ContactType.SENDER, mode);
-        condition = contactFilter(condition, replyTo, ContactType.REPLY_TO, mode);
+        if (filter != null) {
+            condition = condition != null ? condition.and(filter) : filter;
+        }
 
         return dsl.select()
                 .from(EMAIL)
                 .innerJoin(HEADER).on(EMAIL.ID.eq(HEADER.EMAIL_ID))
                 .innerJoin(BODY).on(EMAIL.ID.eq(BODY.EMAIL_ID))
                 .where(condition)
+                .orderBy(EMAIL.RECEIVED.desc())
                 .fetchStream()
                 .map(r -> {
                     final Email e = new Email();

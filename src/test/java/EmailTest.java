@@ -204,6 +204,14 @@ public class EmailTest {
 
         email.attach(attachment);
 
+        final EmailAttachment attachment2 = new EmailAttachment();
+        attachment2.setName("peace.zip");
+        attachment2.setDescription("Sexy zipfiles!");
+        attachment2.setDisposition(EmailAttachment.ATTACHMENT);
+        attachment2.setURL(new URL("https://www.colorado.edu/conflict/peace/download/peace.zip"));
+
+        email.attach(attachment2);
+
         email.send();
     }
 

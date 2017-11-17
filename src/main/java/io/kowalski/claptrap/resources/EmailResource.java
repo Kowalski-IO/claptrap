@@ -1,16 +1,16 @@
 package io.kowalski.claptrap.resources;
 
 import io.kowalski.claptrap.models.Email;
-import io.kowalski.claptrap.models.PredicateMode;
+import io.kowalski.claptrap.models.filters.Filter;
+import io.kowalski.claptrap.services.FilterService;
 import io.kowalski.claptrap.services.StorageService;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Path("/emails")
@@ -21,15 +21,16 @@ public class EmailResource {
     private StorageService storageService;
 
     @GET
-    public Collection<Email> emails(@QueryParam("environment") List<String> environment,
-                                    @QueryParam("to") List<String> to, @QueryParam("cc") List<String> cc, @QueryParam("bcc") List<String> bcc,
-                                    @QueryParam("from") List<String> from, @QueryParam("sender") List<String> sender, @QueryParam("reply_to") List<String> replyTo,
-                                    @QueryParam("subject") List<String> subject, @QueryParam("body") List<String> body,
-                                    @QueryParam("mode") PredicateMode mode) {
-        List<Email> emails = storageService.retrieveForCriteria(environment, to, cc, bcc, from,
-                sender, replyTo, subject, body, mode);
-        Collections.sort(emails);
-        return emails;
+    public Collection<Email> emails(@QueryParam("environment") List<String> environment) {
+        return storageService.retrieveForEnvironment(environment);
+    }
+
+    @POST
+    public boolean emailsForFilter(@QueryParam("environment") List<String> environment, final Map<String, Object> jsonFilter) {
+
+        Filter f = FilterService.parseJSON(jsonFilter);
+
+        return true;
     }
 
     @GET

@@ -1,7 +1,6 @@
 package io.kowalski.claptrap.smtp;
 
 import io.kowalski.claptrap.configuration.Constants;
-import io.kowalski.claptrap.services.ContactService;
 import io.kowalski.claptrap.services.StorageService;
 import org.subethamail.smtp.server.SMTPServer;
 
