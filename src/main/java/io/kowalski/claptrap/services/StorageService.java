@@ -1,10 +1,16 @@
 package io.kowalski.claptrap.services;
 
 import io.kowalski.claptrap.models.*;
+import io.kowalski.claptrap.models.filters.Filter;
+import io.kowalski.claptrap.models.filters.FilterPart;
+import io.kowalski.claptrap.models.filters.Rule;
+import io.kowalski.claptrap.models.filters.RuleSet;
+import io.kowalski.claptrap.models.filters.enums.BooleanOperator;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Query;
+import org.jooq.Record;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -91,7 +97,7 @@ public class StorageService {
                     .map(Path::toFile)
                     .forEach(File::delete);
         } catch (IOException e) {
-           log.error("Unable to delete all attachments while deleting all emails.", e);
+            log.error("Unable to delete all attachments while deleting all emails.", e);
         }
     }
 
@@ -148,7 +154,21 @@ public class StorageService {
     }
 
     public Collection<Email> retrieveForEnvironment(List<String> environment) {
-        return retrieveForCriteria(environment, null);
+        Condition condition = null;
+
+        if (!environment.isEmpty()) {
+            condition = EMAIL.ENVIRONMENT.in(environment);
+        }
+
+        return dsl.select()
+                .from(EMAIL)
+                .innerJoin(HEADER).on(EMAIL.ID.eq(HEADER.EMAIL_ID))
+                .innerJoin(BODY).on(EMAIL.ID.eq(BODY.EMAIL_ID))
+                .where(condition)
+                .orderBy(EMAIL.RECEIVED.desc())
+                .fetchStream()
+                .map(this::parse)
+                .collect(Collectors.toList());
     }
 
     public Collection<Email> retrieveForCriteria(List<String> environment, Condition filter) {
@@ -162,99 +182,193 @@ public class StorageService {
             condition = condition != null ? condition.and(filter) : filter;
         }
 
+        List<UUID> matches = dsl.selectDistinct(EMAIL.ID)
+                .from(EMAIL)
+                .leftJoin(HEADER).on(EMAIL.ID.eq(HEADER.EMAIL_ID))
+                .leftJoin(BODY).on(EMAIL.ID.eq(BODY.EMAIL_ID))
+                .leftJoin(CONTACT).on(EMAIL.ID.eq(CONTACT.EMAIL_ID))
+                .leftJoin(ATTACHMENT).on(EMAIL.ID.eq(ATTACHMENT.EMAIL_ID))
+                .where(condition)
+                .fetchStream()
+                .map(r -> r.get(EMAIL.ID)).collect(Collectors.toList());
+
         return dsl.select()
                 .from(EMAIL)
                 .innerJoin(HEADER).on(EMAIL.ID.eq(HEADER.EMAIL_ID))
                 .innerJoin(BODY).on(EMAIL.ID.eq(BODY.EMAIL_ID))
-                .where(condition)
+                .where(EMAIL.ID.in(matches))
                 .orderBy(EMAIL.RECEIVED.desc())
                 .fetchStream()
-                .map(r -> {
-                    final Email e = new Email();
-                    final Header h = new Header();
-                    final Body b = new Body();
-
-                    e.setId(r.get(EMAIL.ID));
-                    e.setEnvironment(r.get(EMAIL.ENVIRONMENT));
-                    e.setReceived(r.get(EMAIL.RECEIVED));
-                    e.setHeader(h);
-                    e.setBody(b);
-
-                    h.setMessageID(r.get(HEADER.MESSAGE_ID));
-                    h.setDate(r.get(HEADER.DATE));
-                    h.setSubject(r.get(HEADER.SUBJECT));
-                    h.setContentType(r.get(HEADER.CONTENT_TYPE));
-
-                    b.setPlainText(r.get(BODY.PLAIN_TEXT));
-                    b.setHtml(r.get(BODY.HTML));
-
-                    dsl.select()
-                            .from(CONTACT)
-                            .where(CONTACT.EMAIL_ID.eq(e.getId()))
-                            .orderBy(CONTACT.EMAIL)
-                            .fetchStream()
-                            .forEach(contactRecord -> {
-                                Contact temp = new Contact();
-                                temp.setEmail(contactRecord.get(CONTACT.EMAIL));
-                                temp.setName(contactRecord.get(CONTACT.PERSONAL));
-                                temp.setType(ContactType.valueOf(contactRecord.get(CONTACT.TYPE)));
-
-                                switch (temp.getType()) {
-                                    case TO:
-                                        h.getTo().add(temp);
-                                        break;
-                                    case CC:
-                                        h.getCc().add(temp);
-                                        break;
-                                    case BCC:
-                                        h.getBcc().add(temp);
-                                        break;
-                                    case FROM:
-                                        h.setFrom(temp);
-                                        break;
-                                    case SENDER:
-                                        h.setSender(temp);
-                                        break;
-                                    case REPLY_TO:
-                                        h.setReplyTo(temp);
-                                        break;
-                                }
-                            });
-
-                    b.setAttachments(dsl.select()
-                            .from(ATTACHMENT)
-                            .where(ATTACHMENT.EMAIL_ID.eq(e.getId()))
-                            .fetchStream()
-                            .map(attachmentRecord -> {
-                                Attachment temp = new Attachment();
-                                temp.setId(attachmentRecord.get(ATTACHMENT.ID));
-                                temp.setContentType(attachmentRecord.get(ATTACHMENT.CONTENT_TYPE));
-                                temp.setFilename(attachmentRecord.get(ATTACHMENT.FILENAME));
-                                return temp;
-                            })
-                            .collect(Collectors.toList()));
-
-                    return e;
-                })
+                .map(this::parse)
                 .collect(Collectors.toList());
     }
 
-    private Condition contactFilter(Condition condition, List<String> contacts, ContactType type, PredicateMode mode) {
-        if (contacts == null || contacts.isEmpty()) {
-            return condition;
+    private Email parse(Record r) {
+        final Email e = new Email();
+        final Header h = new Header();
+        final Body b = new Body();
+
+        e.setId(r.get(EMAIL.ID));
+        e.setEnvironment(r.get(EMAIL.ENVIRONMENT));
+        e.setReceived(r.get(EMAIL.RECEIVED));
+        e.setHeader(h);
+        e.setBody(b);
+
+        h.setMessageID(r.get(HEADER.MESSAGE_ID));
+        h.setDate(r.get(HEADER.DATE));
+        h.setSubject(r.get(HEADER.SUBJECT));
+        h.setContentType(r.get(HEADER.CONTENT_TYPE));
+
+        b.setPlainText(r.get(BODY.PLAIN_TEXT));
+        b.setHtml(r.get(BODY.HTML));
+
+        dsl.select()
+                .from(CONTACT)
+                .where(CONTACT.EMAIL_ID.eq(e.getId()))
+                .orderBy(CONTACT.EMAIL)
+                .fetchStream()
+                .forEach(contactRecord -> {
+                    Contact temp = new Contact();
+                    temp.setEmail(contactRecord.get(CONTACT.EMAIL));
+                    temp.setName(contactRecord.get(CONTACT.PERSONAL));
+                    temp.setType(ContactType.valueOf(contactRecord.get(CONTACT.TYPE)));
+
+                    switch (temp.getType()) {
+                        case TO:
+                            h.getTo().add(temp);
+                            break;
+                        case CC:
+                            h.getCc().add(temp);
+                            break;
+                        case BCC:
+                            h.getBcc().add(temp);
+                            break;
+                        case FROM:
+                            h.setFrom(temp);
+                            break;
+                        case SENDER:
+                            h.setSender(temp);
+                            break;
+                        case REPLY_TO:
+                            h.setReplyTo(temp);
+                            break;
+                    }
+                });
+
+        b.setAttachments(dsl.select()
+                .from(ATTACHMENT)
+                .where(ATTACHMENT.EMAIL_ID.eq(e.getId()))
+                .fetchStream()
+                .map(attachmentRecord -> {
+                    Attachment temp = new Attachment();
+                    temp.setId(attachmentRecord.get(ATTACHMENT.ID));
+                    temp.setContentType(attachmentRecord.get(ATTACHMENT.CONTENT_TYPE));
+                    temp.setFilename(attachmentRecord.get(ATTACHMENT.FILENAME));
+                    return temp;
+                })
+                .collect(Collectors.toList()));
+
+        return e;
+    }
+
+    public Condition convertFilter(Filter filter) {
+        return parseRuleSet(filter.getRuleSet());
+    }
+
+    private Condition parseRuleSet(RuleSet ruleSet) {
+        Condition condition = null;
+
+        for (FilterPart filterPart : ruleSet.getRules()) {
+            Condition parsed;
+
+            if (filterPart instanceof RuleSet) {
+                parsed = parseRuleSet((RuleSet) filterPart);
+            } else {
+                parsed = parseRule((Rule) filterPart);
+            }
+
+            condition = appendCondition(condition, parsed, ruleSet.getOperator());
         }
 
-        Condition temp = EMAIL.ID.in(dsl.select(CONTACT.EMAIL_ID)
-                .from(CONTACT)
-                .where(CONTACT.TYPE.eq(type.name()))
-                .and(CONTACT.EMAIL.in(contacts)));
+        return condition;
+    }
 
-        switch (mode) {
-            case OR:
+    private Condition parseRule(Rule rule) {
+        Condition condition;
+        switch (rule.getOperator()) {
+            case EQUAL:
+                condition = rule.getField().eq(rule.getParameter(0));
+                break;
+            case NOT_EQUAL:
+                condition = rule.getField().ne(rule.getParameter(0));
+                break;
+            case LESS:
+                condition = rule.getField().lt(rule.getParameter(0));
+                break;
+            case LESS_OR_EQUAL:
+                condition = rule.getField().le(rule.getParameter(0));
+                break;
+            case GREATER:
+                condition = rule.getField().gt(rule.getParameter(0));
+                break;
+            case GREATER_OR_EQUAL:
+                condition = rule.getField().ge(rule.getParameter(0));
+                break;
+            case IN:
+                condition = rule.getField().in(rule.getParameters());
+                break;
+            case NOT_IN:
+                condition = rule.getField().notIn(rule.getParameters());
+                break;
+            case CONTAINS:
+                condition = rule.getField().contains(rule.getParameter(0));
+                break;
+            case DOES_NOT_CONTAIN:
+                condition = rule.getField().notContains(rule.getParameter(0));
+                break;
+            case BETWEEN:
+                condition = rule.getField().between(rule.getParameter(0), rule.getParameter(1));
+                break;
+            case NOT_BETWEEN:
+                condition = rule.getField().notBetween(rule.getParameter(0), rule.getParameter(1));
+                break;
+            case IS_NULL:
+                condition = rule.getField().isNull();
+                break;
+            case IS_NOT_NULL:
+                condition = rule.getField().isNotNull();
+                break;
+            case IS_EMPTY:
+                condition = rule.getField().length().eq(0);
+                break;
+            case IS_NOT_EMPTY:
+                condition = rule.getField().length().gt(0);
+                break;
             default:
-                return condition != null ? condition.or(temp) : temp;
+                return null;
+        }
+
+        if (rule.getTarget().getImplicitConditions() != null && rule.getTarget().getImplicitConditions().length > 0) {
+            for (Condition implicitCondition : rule.getTarget().getImplicitConditions()) {
+                condition = condition.and(implicitCondition);
+            }
+        }
+
+        return condition;
+    }
+
+    private Condition appendCondition(Condition initial, Condition addition, BooleanOperator operator) {
+        if (initial == null) {
+            return addition;
+        }
+        switch (operator) {
+            case OR:
+                return initial.or(addition);
             case AND:
-                return condition != null ? condition.and(temp) : temp;
+                return initial.and(addition);
+            case NA:
+            default:
+                return null;
         }
     }
 

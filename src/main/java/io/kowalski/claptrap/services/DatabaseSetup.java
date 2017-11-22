@@ -22,7 +22,7 @@ public class DatabaseSetup {
         try {
             StringBuilder query = new StringBuilder();
             Path path = Paths.get(DatabaseSetup.class.getClassLoader()
-                    .getResource("sql/schema.sql").toURI());
+                    .getResource("db/migration/V1__Create_Schema.sql").toURI());
             Files.lines(path).forEach(l -> query.append(l).append(" "));
             dsl.execute(query.toString());
         } catch (URISyntaxException | IOException e) {

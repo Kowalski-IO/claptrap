@@ -127,32 +127,6 @@ public class EmailTest {
         }
     }
 
-    @Ignore
-    @Test
-    public void sendPlainEmail5() throws EmailException, MessagingException {
-        for (int i = 97; i <= 107; i++) {
-
-            String from = UUID.randomUUID().toString().replace("-", "").substring(0, 8);
-
-            final SimpleEmail email = new SimpleEmail();
-            email.setHostName("localhost");
-            email.setSmtpPort(2525);
-
-            email.addTo("fancy@kowalski.io", "Fancy Kowalski");
-
-            char c = (char) i;
-
-            email.setFrom(from.concat("@").concat(String.valueOf(c)).concat("fancy.io"), from);
-            email.setSubject("Test simple email ".concat(String.valueOf(i)));
-
-            email.setMsg("This is a simple email test to see if Claptrap actually works!");
-
-            email.send();
-
-            assert email.getMimeMessage().getMessageID() != null;
-        }
-    }
-
     @Test
     public void sendHTMLEmail() throws EmailException {
 

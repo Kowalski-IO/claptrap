@@ -2,7 +2,7 @@
 <configuration>
 	<jdbc>
 		<driver>org.h2.Driver</driver>
-		<url>jdbc:h2:tcp://localhost:32769/default</url>
+		<url>jdbc:h2:file:./target/tempdb</url>
 	</jdbc>
 	<generator>
 		<database>

@@ -50,10 +50,10 @@ public class FilterService {
     private static Rule parseRawRule(final Map<String, Object> rawRule) {
         String rawOperator = rawRule.get("operator").toString().toUpperCase();
         String rawField = rawRule.get("field").toString().toUpperCase();
-        Collection<Object> rawValues;
+        List<Object> rawValues;
 
         if (rawRule.get("value") instanceof Collection) {
-            rawValues = ((Collection) rawRule.get("value"));
+            rawValues = ((List) rawRule.get("value"));
         } else {
             rawValues = new ArrayList<>();
             rawValues.add(rawRule.get("value"));

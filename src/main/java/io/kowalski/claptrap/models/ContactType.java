@@ -7,6 +7,6 @@ public enum ContactType {
     CC,
     BCC,
     SENDER,
-    REPLY_TO;
+    REPLY_TO
 
 }

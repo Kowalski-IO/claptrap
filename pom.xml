@@ -4,10 +4,26 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>io.kowalski</groupId>
+    <artifactId>claptrap</artifactId>
+    <version>3.0</version>
+
+    <name>claptrap</name>
+    <description>Modern email intercepting testing tool.</description>
+    <url>https://claptrap.kowalski.io</url>
+    <inceptionYear>2015</inceptionYear>
+
     <organization>
         <name>Kowalski.io</name>
         <url>https://kowalski.io</url>
     </organization>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://github.com/Kowalski-IO/claptrap/blob/master/LICENSE.md</url>
+        </license>
+    </licenses>
 
     <developers>
         <developer>
@@ -16,12 +32,13 @@
         </developer>
     </developers>
 
-    <groupId>io.kowalski</groupId>
-    <artifactId>claptrap</artifactId>
-    <version>3.0</version>
+    <scm>
+        <url>https://github.com/Kowalski-IO/claptrap</url>
+    </scm>
 
-    <name>claptrap</name>
-    <url>https://claptrap.kowalski.io</url>
+    <issueManagement>
+        <url>https://github.com/Kowalski-IO/claptrap/issues</url>
+    </issueManagement>
 
     <properties>
         <java.version>1.8</java.version>
@@ -30,6 +47,8 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.shade.plugin.version>3.1.0</maven.shade.plugin.version>
+
+        <jooq.config>src/main/resources/jooq_config.xml</jooq.config>
 
         <dropwizard.version>1.2.0</dropwizard.version>
         <dropwizard-guicey.version>4.1.0</dropwizard-guicey.version>
@@ -128,6 +147,23 @@
 
     <build>
         <plugins>
+
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>4.2.0</version>
+                <configuration>
+                    <url>jdbc:h2:file:./target/tempdb</url>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.h2database</groupId>
+                        <artifactId>h2</artifactId>
+                        <version>${h2.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
             <plugin>
                 <groupId>org.jooq</groupId>
                 <artifactId>jooq-codegen-maven</artifactId>
@@ -151,14 +187,6 @@
                 </configuration>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -185,6 +213,7 @@
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
     </build>
 

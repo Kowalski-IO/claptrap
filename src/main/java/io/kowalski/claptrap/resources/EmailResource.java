@@ -4,6 +4,7 @@ import io.kowalski.claptrap.models.Email;
 import io.kowalski.claptrap.models.filters.Filter;
 import io.kowalski.claptrap.services.FilterService;
 import io.kowalski.claptrap.services.StorageService;
+import org.jooq.Condition;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -26,11 +27,10 @@ public class EmailResource {
     }
 
     @POST
-    public boolean emailsForFilter(@QueryParam("environment") List<String> environment, final Map<String, Object> jsonFilter) {
-
-        Filter f = FilterService.parseJSON(jsonFilter);
-
-        return true;
+    public Collection<Email> emailsForFilter(@QueryParam("environment") List<String> environment, final Map<String, Object> jsonFilter) {
+        Filter filter = FilterService.parseJSON(jsonFilter);
+        Condition condition = storageService.convertFilter(filter);
+        return storageService.retrieveForCriteria(environment, condition);
     }
 
     @GET
