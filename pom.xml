@@ -6,6 +6,7 @@
 
     <groupId>io.kowalski</groupId>
     <artifactId>claptrap</artifactId>
+    <packaging>pom</packaging>
     <version>3.0</version>
 
     <name>claptrap</name>
@@ -100,6 +101,12 @@
         </dependency>
 
         <dependency>
+            <groupId>io.kowalski</groupId>
+            <artifactId>jqb2jooq</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>${hikari.version}</version>
@@ -133,7 +140,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>

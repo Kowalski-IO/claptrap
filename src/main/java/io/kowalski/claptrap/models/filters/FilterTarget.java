@@ -1,16 +1,16 @@
-package io.kowalski.claptrap.models.filters.enums;
+package io.kowalski.claptrap.models.filters;
 
 import io.kowalski.claptrap.models.ContactType;
 import io.kowalski.claptrap.models.jooq.Tables;
-import lombok.Getter;
+import io.kowalski.jqb2jooq.RuleTarget;
 import org.jooq.Condition;
 import org.jooq.Field;
 
 import static io.kowalski.claptrap.models.jooq.Tables.*;
 import static io.kowalski.claptrap.models.jooq.tables.Contact.CONTACT;
+import static org.jooq.impl.DSL.field;
 
-@Getter
-public enum RuleTarget {
+public enum FilterTarget implements RuleTarget {
 
     TO(CONTACT.EMAIL, CONTACT.TYPE.eq(ContactType.TO.name())),
     CC(CONTACT.EMAIL, CONTACT.TYPE.eq(ContactType.CC.name())),
@@ -31,9 +31,24 @@ public enum RuleTarget {
     private final Field field;
     private final Condition[] implicitConditions;
 
-    RuleTarget (Field field, Condition... implicitConditions) {
+    FilterTarget(Field field, Condition... implicitConditions) {
         this.field = field;
         this.implicitConditions = implicitConditions;
+    }
+
+    @Override
+    public FilterTarget parse(String value) {
+        return FilterTarget.valueOf(value);
+    }
+
+    @Override
+    public Field getField() {
+        return field;
+    }
+
+    @Override
+    public Condition[] getImplicitConditions() {
+        return implicitConditions;
     }
 
 }
