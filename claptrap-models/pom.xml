@@ -16,7 +16,7 @@
 
 	<properties>
 		<commons-lang3.version>3.4</commons-lang3.version>
-		<commons-email.version>1.4</commons-email.version>
+		<commons-email.version>1.5</commons-email.version>
 		<twillo.version>6.3.0</twillo.version>
 	</properties>
 
